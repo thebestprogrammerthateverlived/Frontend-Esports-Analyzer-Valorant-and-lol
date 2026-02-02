@@ -1,0 +1,5 @@
+{
+  "name": "Nexus Scout AI",
+  "description": "Comprehensive REST API for esports team analysis and scouting powered by Grid.gg. Features confidence scoring, trend analysis, and smart caching.",
+  "requestFramePermissions": []
+}
