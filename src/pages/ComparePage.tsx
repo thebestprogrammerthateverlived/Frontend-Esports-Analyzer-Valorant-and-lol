@@ -1,6 +1,5 @@
 // ============================================================================
 // COMPARE TEAMS PAGE - Side-by-side team comparison
-// ============================================================================
 
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -90,9 +89,9 @@ export const ComparePage: React.FC<ComparePageProps> = ({ currentGame }) => {
                                     {getWinner()}
                                 </p>
                             </div>
-                            <ConfidenceBadgeWithTooltip 
-                                level={data.team1.stats.confidence.level} 
-                                size="lg" 
+                            <ConfidenceBadgeWithTooltip
+                                level={data.team1.stats.confidence.level}
+                                size="lg"
                             />
                         </div>
                     </motion.div>
@@ -115,12 +114,12 @@ export const ComparePage: React.FC<ComparePageProps> = ({ currentGame }) => {
 
                     {/* Advantages */}
                     <div className="grid grid-cols-2 gap-6">
-                        <AdvantagesCard 
+                        <AdvantagesCard
                             teamName={data.team1.name}
                             advantages={data.advantages?.team1 || []}
                             accentColor={accentColor}
                         />
-                        <AdvantagesCard 
+                        <AdvantagesCard
                             teamName={data.team2.name}
                             advantages={data.advantages?.team2 || []}
                             accentColor={accentColor}
@@ -154,9 +153,7 @@ export const ComparePage: React.FC<ComparePageProps> = ({ currentGame }) => {
     );
 };
 
-// ============================================================================
 // TEAM METRICS CARD
-// ============================================================================
 
 const TeamMetricsCard: React.FC<{
     name: string;
@@ -164,13 +161,13 @@ const TeamMetricsCard: React.FC<{
     accentColor: string;
     isWinner: boolean;
 }> = ({ name, stats, accentColor, isWinner }) => {
-    const borderColor = isWinner 
+    const borderColor = isWinner
         ? (accentColor === 'red' ? 'border-red-600' : 'border-amber-600')
         : 'border-zinc-800/50';
-    const badgeBg = accentColor === 'red' 
-        ? 'bg-gradient-to-r from-red-500 to-red-600' 
+    const badgeBg = accentColor === 'red'
+        ? 'bg-gradient-to-r from-red-500 to-red-600'
         : 'bg-gradient-to-r from-amber-500 to-amber-600';
-    
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -235,9 +232,7 @@ const TeamMetricsCard: React.FC<{
     );
 };
 
-// ============================================================================
 // METRIC ROW
-// ============================================================================
 
 const MetricRow: React.FC<{
     label: string;
@@ -262,9 +257,7 @@ const MetricRow: React.FC<{
     );
 };
 
-// ============================================================================
 // ADVANTAGES CARD
-// ============================================================================
 
 const AdvantagesCard: React.FC<{
     teamName: string;
@@ -272,7 +265,7 @@ const AdvantagesCard: React.FC<{
     accentColor: string;
 }> = ({ teamName, advantages = [], accentColor }) => {
     const textColor = accentColor === 'red' ? 'text-red-400' : 'text-amber-400';
-    
+
     return (
         <div className="p-4 bg-zinc-900/50 border border-zinc-800/50 rounded-lg">
             <h4 className="text-sm font-semibold text-white mb-3">{teamName} Advantages</h4>

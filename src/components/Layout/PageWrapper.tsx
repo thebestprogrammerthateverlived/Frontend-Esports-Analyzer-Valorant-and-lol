@@ -1,6 +1,5 @@
 // ============================================================================
 // PAGE WRAPPER - Consistent layout container
-// ============================================================================
 
 import React from 'react';
 import { motion } from 'motion/react';

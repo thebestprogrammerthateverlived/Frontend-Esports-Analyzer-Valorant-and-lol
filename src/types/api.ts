@@ -1,11 +1,8 @@
 // ============================================================================
 // API TYPE DEFINITIONS - SCOUTER ESPORTS ANALYZER
 // Maps to Go backend REST API endpoints
-// ============================================================================
 
-// ============================================================================
 // ENUMS & CONSTANTS
-// ============================================================================
 
 export enum Game {
   VALORANT = 'valorant',
@@ -32,9 +29,7 @@ export enum TimeWindow {
   LAST_YEAR = 'LAST_YEAR',
 }
 
-// ============================================================================
 // TEAMS LIST - /api/v1/teams
-// ============================================================================
 
 export interface TeamsListResponse {
   title: string;
@@ -44,9 +39,7 @@ export interface TeamsListResponse {
   note?: string;
 }
 
-// ============================================================================
 // SEARCH ENDPOINT - /api/v1/teams/search
-// ============================================================================
 
 export interface SearchRequest {
   query: string;
@@ -67,9 +60,7 @@ export interface SearchResponse {
   count: number;
 }
 
-// ============================================================================
 // TEAM COMPARISON - /api/v1/compare
-// ============================================================================
 
 export interface CompareRequest {
   team1: string;
@@ -134,9 +125,7 @@ export interface CompareResponse {
   };
 }
 
-// ============================================================================
 // TRENDS DASHBOARD - /api/v1/trends
-// ============================================================================
 
 export interface TrendsRequest {
   teamName: string;
@@ -166,9 +155,7 @@ export interface TrendsResponse {
   confidence: Confidence;
 }
 
-// ============================================================================
 // SCOUTING REPORT - /api/v1/scouting-report
-// ============================================================================
 
 export interface ScoutingReportRequest {
   opponent: string;
@@ -217,9 +204,7 @@ export interface ScoutingReportResponse {
   cacheStatus: CacheStatus;
 }
 
-// ============================================================================
 // META ANALYSIS - /api/v1/meta
-// ============================================================================
 
 export interface MetaAnalysisRequest {
   game: Game | string;
@@ -232,9 +217,7 @@ export interface MetaAnalysisResponse {
   note: string;
 }
 
-// ============================================================================
 // ERROR RESPONSES
-// ============================================================================
 
 export interface APIError {
   error: string;
@@ -248,9 +231,7 @@ export interface APIError {
   reason?: string;
 }
 
-// ============================================================================
 // API CLIENT CONFIG
-// ============================================================================
 
 export interface APIConfig {
   baseURL: string;

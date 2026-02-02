@@ -1,6 +1,5 @@
 // ============================================================================
 // APP - Main application component with routing
-// ============================================================================
 
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -14,9 +13,7 @@ import { ScoutingPage } from './src/pages/ScoutingPage';
 import { MetaPage } from './src/pages/MetaPage';
 import { Game } from './src/types/api';
 
-// ============================================================================
 // TANSTACK QUERY CLIENT
-// ============================================================================
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -28,9 +25,7 @@ const queryClient = new QueryClient({
     },
 });
 
-// ============================================================================
 // MAIN APP
-// ============================================================================
 
 function App() {
     const [currentGame, setCurrentGame] = useState<Game>(Game.VALORANT);
@@ -41,7 +36,7 @@ function App() {
                 <BrowserRouter future={{
                     v7_startTransition: true,
                     v7_relativeSplatPath: true
-                    }}>
+                }}>
                     <div className="flex h-screen bg-zinc-950 text-white overflow-hidden">
                         {/* Sidebar Navigation */}
                         <Sidebar

@@ -1,6 +1,5 @@
 // ============================================================================
 // TRENDS PAGE - Performance trends analysis
-// ============================================================================
 
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -94,21 +93,19 @@ export const TrendsPage: React.FC<TrendsPageProps> = ({ currentGame }) => {
                     <div className="p-4 bg-zinc-900/50 border border-zinc-800/50 rounded-lg">
                         <div className="flex items-center justify-between mb-2">
                             <h4 className="text-sm font-semibold text-white">Analysis Confidence</h4>
-                            <span className={`text-sm font-medium ${
-                                data.confidence.level === 'HIGH' ? 'text-emerald-400' :
-                                data.confidence.level === 'MEDIUM' ? 'text-amber-400' :
-                                'text-zinc-400'
-                            }`}>
+                            <span className={`text-sm font-medium ${data.confidence.level === 'HIGH' ? 'text-emerald-400' :
+                                    data.confidence.level === 'MEDIUM' ? 'text-amber-400' :
+                                        'text-zinc-400'
+                                }`}>
                                 {data.confidence.level}
                             </span>
                         </div>
                         <p className="text-xs text-zinc-400">{data.confidence.reasoning}</p>
                         <div className="mt-2 flex items-center gap-2">
                             <div className="flex-1 bg-zinc-800 rounded-full h-2">
-                                <div 
-                                    className={`h-2 rounded-full bg-linear-to-r ${
-                                        currentGame === Game.VALORANT ? 'from-red-600 to-red-500' : 'from-amber-500 to-amber-400'
-                                    }`}
+                                <div
+                                    className={`h-2 rounded-full bg-linear-to-r ${currentGame === Game.VALORANT ? 'from-red-600 to-red-500' : 'from-amber-500 to-amber-400'
+                                        }`}
                                     style={{ width: `${data.confidence.reliabilityScore}%` }}
                                 />
                             </div>
@@ -129,7 +126,7 @@ export const TrendsPage: React.FC<TrendsPageProps> = ({ currentGame }) => {
                                         </span>
                                     </div>
                                     <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
-                                        <div 
+                                        <div
                                             className="h-full bg-zinc-600"
                                             style={{ width: `${data.overall.winRate * 100}%` }}
                                         />
@@ -143,10 +140,9 @@ export const TrendsPage: React.FC<TrendsPageProps> = ({ currentGame }) => {
                                         </span>
                                     </div>
                                     <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
-                                        <div 
-                                            className={`h-full bg-linear-to-r ${
-                                                currentGame === Game.VALORANT ? 'from-red-600 to-red-500' : 'from-amber-500 to-amber-400'
-                                            }`}
+                                        <div
+                                            className={`h-full bg-linear-to-r ${currentGame === Game.VALORANT ? 'from-red-600 to-red-500' : 'from-amber-500 to-amber-400'
+                                                }`}
                                             style={{ width: `${data.recent.winRate * 100}%` }}
                                         />
                                     </div>
@@ -165,7 +161,7 @@ export const TrendsPage: React.FC<TrendsPageProps> = ({ currentGame }) => {
                                         </span>
                                     </div>
                                     <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
-                                        <div 
+                                        <div
                                             className="h-full bg-zinc-600"
                                             style={{ width: `${Math.min(data.overall.kdRatio / 2 * 100, 100)}%` }}
                                         />
@@ -179,10 +175,9 @@ export const TrendsPage: React.FC<TrendsPageProps> = ({ currentGame }) => {
                                         </span>
                                     </div>
                                     <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
-                                        <div 
-                                            className={`h-full bg-linear-to-r ${
-                                                currentGame === Game.VALORANT ? 'from-red-600 to-red-500' : 'from-amber-500 to-amber-400'
-                                            }`}
+                                        <div
+                                            className={`h-full bg-linear-to-r ${currentGame === Game.VALORANT ? 'from-red-600 to-red-500' : 'from-amber-500 to-amber-400'
+                                                }`}
                                             style={{ width: `${Math.min(data.recent.kdRatio / 2 * 100, 100)}%` }}
                                         />
                                     </div>
@@ -236,9 +231,7 @@ export const TrendsPage: React.FC<TrendsPageProps> = ({ currentGame }) => {
     );
 };
 
-// ============================================================================
 // SUMMARY CARD
-// ============================================================================
 
 const SummaryCard: React.FC<{
     title: string;
@@ -271,9 +264,7 @@ const SummaryCard: React.FC<{
     );
 };
 
-// ============================================================================
 // ALERT CARD
-// ============================================================================
 
 const AlertCard: React.FC<{ alert: TrendAlert }> = ({ alert }) => {
     const getAlertStyles = () => {
@@ -323,11 +314,10 @@ const AlertCard: React.FC<{ alert: TrendAlert }> = ({ alert }) => {
                 <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                         <p className="text-sm font-semibold text-white">{alert.message}</p>
-                        <span className={`text-xs px-2 py-0.5 rounded ${
-                            alert.severity === 'HIGH' ? 'bg-red-950/50 text-red-400' :
-                            alert.severity === 'MEDIUM' ? 'bg-amber-950/50 text-amber-400' :
-                            'bg-zinc-800/50 text-zinc-400'
-                        }`}>
+                        <span className={`text-xs px-2 py-0.5 rounded ${alert.severity === 'HIGH' ? 'bg-red-950/50 text-red-400' :
+                                alert.severity === 'MEDIUM' ? 'bg-amber-950/50 text-amber-400' :
+                                    'bg-zinc-800/50 text-zinc-400'
+                            }`}>
                             {alert.severity}
                         </span>
                     </div>

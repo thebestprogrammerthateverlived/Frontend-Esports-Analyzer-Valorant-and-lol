@@ -1,6 +1,5 @@
 // ============================================================================
 // SIDEBAR NAVIGATION - Game-specific theming with persistent navigation
-// ============================================================================
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
@@ -15,9 +14,7 @@ import {
 } from 'lucide-react';
 import { Game } from '../../types/api';
 
-// ============================================================================
 // TYPES
-// ============================================================================
 
 interface SidebarProps {
     currentGame: Game;
@@ -30,9 +27,7 @@ interface NavItem {
     icon: React.ElementType;
 }
 
-// ============================================================================
 // NAVIGATION ITEMS
-// ============================================================================
 
 const navItems: NavItem[] = [
     { name: 'Search', path: '/', icon: Search },
@@ -42,9 +37,7 @@ const navItems: NavItem[] = [
     { name: 'Meta', path: '/meta', icon: Layers },
 ];
 
-// ============================================================================
 // GAME SELECTOR
-// ============================================================================
 
 const GameSelector: React.FC<{
     currentGame: Game;
@@ -103,9 +96,7 @@ const GameSelector: React.FC<{
     );
 };
 
-// ============================================================================
 // SIDEBAR COMPONENT
-// ============================================================================
 
 export const Sidebar: React.FC<SidebarProps> = ({
     currentGame,
@@ -183,10 +174,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                         size={18}
                                         strokeWidth={2.5}
                                         className={`relative z-10 ${isActive
-                                                ? currentGame === Game.VALORANT
-                                                    ? 'text-red-500'
-                                                    : 'text-amber-500'
-                                                : ''
+                                            ? currentGame === Game.VALORANT
+                                                ? 'text-red-500'
+                                                : 'text-amber-500'
+                                            : ''
                                             }`}
                                     />
                                     <span className="relative z-10 text-sm font-medium">

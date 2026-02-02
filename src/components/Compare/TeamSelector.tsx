@@ -1,6 +1,5 @@
 // ============================================================================
 // TEAM SELECTOR - Dropdown for selecting teams
-// ============================================================================
 
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -39,7 +38,7 @@ export const TeamSelector: React.FC<TeamSelectorProps> = ({
         team.toLowerCase().includes(searchQuery.toLowerCase())
     ) || [];
 
-    const borderColor = isOpen 
+    const borderColor = isOpen
         ? (accentColor === 'red' ? 'border-red-600' : 'border-amber-600')
         : 'border-zinc-800/50 hover:border-zinc-700';
 
@@ -104,10 +103,10 @@ export const TeamSelector: React.FC<TeamSelectorProps> = ({
                                 {filteredTeams.length > 0 ? (
                                     filteredTeams.map((team, index) => {
                                         const isSelected = team === selectedTeam;
-                                        const selectedBg = accentColor === 'red' 
+                                        const selectedBg = accentColor === 'red'
                                             ? 'bg-red-950/30 text-white'
                                             : 'bg-amber-950/30 text-white';
-                                        
+
                                         return (
                                             <button
                                                 key={`${team}-${index}`}
@@ -116,9 +115,8 @@ export const TeamSelector: React.FC<TeamSelectorProps> = ({
                                                     setIsOpen(false);
                                                     setSearchQuery('');
                                                 }}
-                                                className={`w-full px-4 py-3 text-left transition-colors ${
-                                                    isSelected ? selectedBg : 'text-zinc-300 hover:bg-zinc-800'
-                                                }`}
+                                                className={`w-full px-4 py-3 text-left transition-colors ${isSelected ? selectedBg : 'text-zinc-300 hover:bg-zinc-800'
+                                                    }`}
                                             >
                                                 <p className="text-sm font-medium">{team}</p>
                                             </button>

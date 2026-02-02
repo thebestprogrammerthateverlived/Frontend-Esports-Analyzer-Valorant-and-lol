@@ -1,6 +1,5 @@
 // ============================================================================
 // SCOUTING REPORT PAGE - Comprehensive team analysis
-// ============================================================================
 
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -111,9 +110,9 @@ export const ScoutingPage: React.FC<ScoutingPageProps> = ({ currentGame }) => {
                             {data.keyInsights
                                 .sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority])
                                 .map((insight, index) => (
-                                    <InsightCard 
-                                        key={index} 
-                                        insight={insight} 
+                                    <InsightCard
+                                        key={index}
+                                        insight={insight}
                                         index={index}
                                         accentColor={accentColor}
                                     />
@@ -201,9 +200,7 @@ export const ScoutingPage: React.FC<ScoutingPageProps> = ({ currentGame }) => {
     );
 };
 
-// ============================================================================
 // PRIORITY ORDER
-// ============================================================================
 
 const priorityOrder: Record<string, number> = {
     HIGH: 0,
@@ -211,9 +208,7 @@ const priorityOrder: Record<string, number> = {
     LOW: 2,
 };
 
-// ============================================================================
 // INSIGHT CARD
-// ============================================================================
 
 const InsightCard: React.FC<{
     insight: KeyInsight;
@@ -264,9 +259,7 @@ const InsightCard: React.FC<{
     );
 };
 
-// ============================================================================
 // TEAM STATS CARD
-// ============================================================================
 
 const TeamStatsCard: React.FC<{
     name: string;
@@ -275,11 +268,11 @@ const TeamStatsCard: React.FC<{
     accentColor: string;
 }> = ({ name, stats, advantages = [], accentColor }) => {
     const advantageColor = accentColor === 'red' ? 'text-red-400' : 'text-amber-400';
-    
+
     return (
         <div className="p-6 bg-zinc-900/50 border border-zinc-800/50 rounded-xl">
             <h4 className="text-lg font-bold text-white mb-4">{name}</h4>
-            
+
             <div className="space-y-3 mb-4">
                 <div className="flex items-center justify-between">
                     <span className="text-sm text-zinc-400">Win Rate</span>
@@ -318,9 +311,7 @@ const TeamStatsCard: React.FC<{
     );
 };
 
-// ============================================================================
 // TREND CARD
-// ============================================================================
 
 const TrendCard: React.FC<{
     title: string;
@@ -330,7 +321,7 @@ const TrendCard: React.FC<{
     return (
         <div className="p-6 bg-zinc-900/50 border border-zinc-800/50 rounded-xl">
             <h4 className="text-sm font-semibold text-white mb-4">{title}</h4>
-            
+
             <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
                     <p className="text-xs text-zinc-500 mb-1">Overall Win Rate</p>

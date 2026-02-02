@@ -1,14 +1,11 @@
 // ============================================================================
 // TOAST CONTEXT - Global notification system
-// ============================================================================
 
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, AlertCircle, CheckCircle, Info, AlertTriangle } from 'lucide-react';
 
-// ============================================================================
 // TYPES
-// ============================================================================
 
 type ToastType = 'success' | 'error' | 'warning' | 'info';
 
@@ -30,9 +27,7 @@ interface ToastContextValue {
     hideToast: (id: string) => void;
 }
 
-// ============================================================================
 // CONTEXT
-// ============================================================================
 
 const ToastContext = createContext<ToastContextValue | undefined>(undefined);
 
@@ -44,9 +39,7 @@ export const useToast = () => {
     return context;
 };
 
-// ============================================================================
 // TOAST COMPONENT
-// ============================================================================
 
 const ToastIcon = ({ type }: { type: ToastType }) => {
     const iconProps = { size: 20, strokeWidth: 2.5 };
@@ -119,9 +112,7 @@ const ToastItem = ({
     );
 };
 
-// ============================================================================
 // PROVIDER
-// ============================================================================
 
 export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
     children,

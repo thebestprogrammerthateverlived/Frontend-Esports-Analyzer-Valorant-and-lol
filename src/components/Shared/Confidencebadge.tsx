@@ -1,6 +1,5 @@
 // ============================================================================
 // CONFIDENCE BADGE - Color-coded confidence indicators
-// ============================================================================
 
 import React from 'react';
 import { ConfidenceLevel } from '../../types/api';

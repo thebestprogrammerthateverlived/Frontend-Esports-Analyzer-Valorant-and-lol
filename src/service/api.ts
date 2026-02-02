@@ -1,7 +1,6 @@
 // ============================================================================
 // API SERVICE - SCOUTER ESPORTS ANALYZER
 // TanStack Query integration with 1-hour caching and error handling
-// ============================================================================
 
 import type {
     SearchRequest,
@@ -19,9 +18,7 @@ import type {
     TeamsListResponse,
 } from '../types/api';
 
-// ============================================================================
 // CONFIGURATION
-// ============================================================================
 
 const API_CONFIG: APIConfig = {
     baseURL: import.meta.env.VITE_API_BASE_URL || 'https://valorant-league-of-legends-scouting.onrender.com' || "https://curious-pithivier-f0a2d5.netlify.app/",
@@ -30,9 +27,7 @@ const API_CONFIG: APIConfig = {
     cacheTime: 3600000, // 1 hour in milliseconds
 };
 
-// ============================================================================
 // ERROR HANDLING
-// ============================================================================
 
 export class APIClientError extends Error {
     constructor(
@@ -95,9 +90,7 @@ function handleAPIError(error: any): never {
     }
 }
 
-// ============================================================================
 // HTTP CLIENT
-// ============================================================================
 
 async function apiRequest<T>(
     endpoint: string,
@@ -155,9 +148,7 @@ async function apiRequest<T>(
     }
 }
 
-// ============================================================================
 // API ENDPOINTS
-// ============================================================================
 
 export const api = {
     // Get list of teams for a game
@@ -225,9 +216,7 @@ export const api = {
     },
 };
 
-// ============================================================================
 // TANSTACK QUERY KEYS
-// ============================================================================
 
 export const queryKeys = {
     teams: (game: string) => ['teams', game] as const,
@@ -240,9 +229,7 @@ export const queryKeys = {
         ['metaAnalysis', params] as const,
 };
 
-// ============================================================================
 // EXPORTS
-// ============================================================================
 
 export { API_CONFIG };
 export type { APIConfig };

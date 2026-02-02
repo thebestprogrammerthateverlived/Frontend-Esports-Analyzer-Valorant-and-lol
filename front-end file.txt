@@ -1,6 +1,5 @@
 // ============================================================================
 // TEAM SELECTOR - Dropdown for selecting teams
-// ============================================================================
 
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -141,9 +140,7 @@ export const TeamSelector: React.FC<TeamSelectorProps> = ({
     );
 };
 
-// ============================================================================
 // PAGE WRAPPER - Consistent layout container
-// ============================================================================
 
 import React from 'react';
 import { motion } from 'motion/react';
@@ -185,9 +182,7 @@ export const PageWrapper: React.FC<PageWrapperProps> = ({
   );
 };
 
-// ============================================================================
 // SIDEBAR NAVIGATION - Game-specific theming with persistent navigation
-// ============================================================================
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
@@ -202,9 +197,7 @@ import {
 } from 'lucide-react';
 import { Game } from '../../types/api';
 
-// ============================================================================
 // TYPES
-// ============================================================================
 
 interface SidebarProps {
     currentGame: Game;
@@ -217,9 +210,7 @@ interface NavItem {
     icon: React.ElementType;
 }
 
-// ============================================================================
 // NAVIGATION ITEMS
-// ============================================================================
 
 const navItems: NavItem[] = [
     { name: 'Search', path: '/', icon: Search },
@@ -229,9 +220,7 @@ const navItems: NavItem[] = [
     { name: 'Meta', path: '/meta', icon: Layers },
 ];
 
-// ============================================================================
 // GAME SELECTOR
-// ============================================================================
 
 const GameSelector: React.FC<{
     currentGame: Game;
@@ -290,9 +279,7 @@ const GameSelector: React.FC<{
     );
 };
 
-// ============================================================================
 // SIDEBAR COMPONENT
-// ============================================================================
 
 export const Sidebar: React.FC<SidebarProps> = ({
     currentGame,
@@ -401,9 +388,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     );
 };
 
-// ============================================================================
 // CONFIDENCE BADGE - Color-coded confidence indicators
-// ============================================================================
 
 import React from 'react';
 import { ConfidenceLevel } from '../../types/api';
@@ -510,16 +495,12 @@ export const ConfidenceBadgeWithTooltip: React.FC<ConfidenceBadgeProps> = ({
     );
 };
 
-// ============================================================================
 // SKELETON LOADER - Animated loading placeholders
-// ============================================================================
 
 import React from 'react';
 import { motion } from 'motion/react';
 
-// ============================================================================
 // BASE SKELETON
-// ============================================================================
 
 interface SkeletonProps {
     className?: string;
@@ -568,9 +549,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
     );
 };
 
-// ============================================================================
 // PRESET LOADERS
-// ============================================================================
 
 export const CardSkeleton: React.FC = () => {
     return (
@@ -676,17 +655,13 @@ export const ScoutingReportSkeleton: React.FC = () => {
     );
 };
 
-// ============================================================================
 // TOAST CONTEXT - Global notification system
-// ============================================================================
 
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, AlertCircle, CheckCircle, Info, AlertTriangle } from 'lucide-react';
 
-// ============================================================================
 // TYPES
-// ============================================================================
 
 type ToastType = 'success' | 'error' | 'warning' | 'info';
 
@@ -708,9 +683,7 @@ interface ToastContextValue {
     hideToast: (id: string) => void;
 }
 
-// ============================================================================
 // CONTEXT
-// ============================================================================
 
 const ToastContext = createContext<ToastContextValue | undefined>(undefined);
 
@@ -722,9 +695,7 @@ export const useToast = () => {
     return context;
 };
 
-// ============================================================================
 // TOAST COMPONENT
-// ============================================================================
 
 const ToastIcon = ({ type }: { type: ToastType }) => {
     const iconProps = { size: 20, strokeWidth: 2.5 };
@@ -797,9 +768,7 @@ const ToastItem = ({
     );
 };
 
-// ============================================================================
 // PROVIDER
-// ============================================================================
 
 export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
@@ -875,9 +844,7 @@ export function useDebounce<T>(value: T, delay: number): T {
     return debouncedValue;
 }
 
-// ============================================================================
 // COMPARE TEAMS PAGE - Side-by-side team comparison
-// ============================================================================
 
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -1011,9 +978,7 @@ export const ComparePage: React.FC<ComparePageProps> = ({ currentGame }) => {
     );
 };
 
-// ============================================================================
 // TEAM METRICS CARD
-// ============================================================================
 
 const TeamMetricsCard: React.FC<{
     metrics: TeamMetrics;
@@ -1077,9 +1042,7 @@ const TeamMetricsCard: React.FC<{
     );
 };
 
-// ============================================================================
 // METRIC ROW
-// ============================================================================
 
 const MetricRow: React.FC<{
     label: string;
@@ -1104,9 +1067,7 @@ const MetricRow: React.FC<{
     );
 };
 
-// ============================================================================
 // INSIGHT CARD
-// ============================================================================
 
 const priorityOrder = {
     [InsightPriority.HIGH]: 0,
@@ -1137,9 +1098,7 @@ const InsightCard: React.FC<{
     );
 };
 
-// ============================================================================
 // META ANALYSIS PAGE - Coming Soon
-// ============================================================================
 
 import React from 'react';
 import { motion } from 'motion/react';
@@ -1283,9 +1242,7 @@ export const MetaPage: React.FC<MetaPageProps> = ({ currentGame }) => {
     );
 };
 
-// ============================================================================
 // SCOUTING REPORT PAGE - Comprehensive team analysis
-// ============================================================================
 
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -1503,9 +1460,7 @@ export const ScoutingPage: React.FC<ScoutingPageProps> = ({ currentGame }) => {
     );
 };
 
-// ============================================================================
 // STAT BOX
-// ============================================================================
 
 const StatBox: React.FC<{
     icon: React.ElementType;
@@ -1524,9 +1479,7 @@ const StatBox: React.FC<{
     );
 };
 
-// ============================================================================
 // INSIGHT CARD
-// ============================================================================
 
 const priorityOrder = {
     [InsightPriority.HIGH]: 0,
@@ -1585,9 +1538,7 @@ const InsightCard: React.FC<{
     );
 };
 
-// ============================================================================
 // PLAYER CARD
-// ============================================================================
 
 const PlayerCard: React.FC<{
     player: PlayerHighlight;
@@ -1619,9 +1570,7 @@ const PlayerCard: React.FC<{
     );
 };
 
-// ============================================================================
 // SEARCH PAGE - Autocomplete search with relevance scoring
-// ============================================================================
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -1789,9 +1738,7 @@ export const SearchPage: React.FC<SearchPageProps> = ({ currentGame }) => {
     );
 };
 
-// ============================================================================
 // SEARCH RESULT ITEM
-// ============================================================================
 
 const SearchResultItem: React.FC<{
     result: SearchResult;
@@ -1850,9 +1797,7 @@ const SearchResultItem: React.FC<{
     );
 };
 
-// ============================================================================
 // TRENDS PAGE - Performance trends with recency bias detection
-// ============================================================================
 
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -2109,9 +2054,7 @@ export const TrendsPage: React.FC<TrendsPageProps> = ({ currentGame }) => {
     );
 };
 
-// ============================================================================
 // SUMMARY CARD
-// ============================================================================
 
 const SummaryCard: React.FC<{
     title: string;
@@ -2137,10 +2080,8 @@ const SummaryCard: React.FC<{
     );
 };
 
-// ============================================================================
 // API SERVICE - SCOUTER ESPORTS ANALYZER
 // TanStack Query integration with 1-hour caching and error handling
-// ============================================================================
 
 import type {
     SearchRequest,
@@ -2157,9 +2098,7 @@ import type {
     APIConfig,
 } from '../types/api';
 
-// ============================================================================
 // CONFIGURATION
-// ============================================================================
 
 const API_CONFIG: APIConfig = {
     baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080',
@@ -2168,9 +2107,7 @@ const API_CONFIG: APIConfig = {
     cacheTime: 3600000, // 1 hour in milliseconds
 };
 
-// ============================================================================
 // ERROR HANDLING
-// ============================================================================
 
 export class APIClientError extends Error {
     constructor(
@@ -2233,9 +2170,7 @@ function handleAPIError(error: any): never {
     }
 }
 
-// ============================================================================
 // HTTP CLIENT
-// ============================================================================
 
 async function apiRequest<T>(
     endpoint: string,
@@ -2293,9 +2228,7 @@ async function apiRequest<T>(
     }
 }
 
-// ============================================================================
 // API ENDPOINTS
-// ============================================================================
 
 export const api = {
     // Search for teams/players
@@ -2358,9 +2291,7 @@ export const api = {
     },
 };
 
-// ============================================================================
 // TANSTACK QUERY KEYS
-// ============================================================================
 
 export const queryKeys = {
     search: (params: SearchRequest) => ['search', params] as const,
@@ -2372,21 +2303,15 @@ export const queryKeys = {
         ['metaAnalysis', params] as const,
 };
 
-// ============================================================================
 // EXPORTS
-// ============================================================================
 
 export { API_CONFIG };
 export type { APIConfig };
 
-// ============================================================================
 // API TYPE DEFINITIONS - SCOUTER ESPORTS ANALYZER
 // Maps to Go backend REST API endpoints
-// ============================================================================
 
-// ============================================================================
 // ENUMS & CONSTANTS
-// ============================================================================
 
 export enum Game {
   VALORANT = 'valorant',
@@ -2405,9 +2330,7 @@ export enum InsightPriority {
   LOW = 'LOW',
 }
 
-// ============================================================================
 // SEARCH ENDPOINT - /api/v1/search
-// ============================================================================
 
 export interface SearchRequest {
   query: string;
@@ -2429,9 +2352,7 @@ export interface SearchResponse {
   total: number;
 }
 
-// ============================================================================
 // TEAM COMPARISON - /api/v1/compare
-// ============================================================================
 
 export interface CompareRequest {
   team1_id: string;
@@ -2466,9 +2387,7 @@ export interface CompareResponse {
   cache_timestamp?: string;
 }
 
-// ============================================================================
 // TRENDS DASHBOARD - /api/v1/trends
-// ============================================================================
 
 export interface TrendsRequest {
   team_id: string;
@@ -2493,9 +2412,7 @@ export interface TrendsResponse {
   cached: boolean;
 }
 
-// ============================================================================
 // SCOUTING REPORT - /api/v1/scouting-report
-// ============================================================================
 
 export interface ScoutingReportRequest {
   team_id: string;
@@ -2543,9 +2460,7 @@ export interface ScoutingReportResponse {
   generation_time_ms?: number; // Latency indicator
 }
 
-// ============================================================================
 // META ANALYSIS - /api/v1/meta (Coming Soon)
-// ============================================================================
 
 export interface MetaAnalysisRequest {
   game: Game;
@@ -2558,9 +2473,7 @@ export interface MetaAnalysisResponse {
   expected_features: string[];
 }
 
-// ============================================================================
 // ERROR RESPONSES
-// ============================================================================
 
 export interface APIError {
   error: string;
@@ -2569,9 +2482,7 @@ export interface APIError {
   retry_after?: string; // For 429/504 errors
 }
 
-// ============================================================================
 // CACHE METADATA
-// ============================================================================
 
 export interface CacheInfo {
   cached: boolean;
@@ -2580,9 +2491,7 @@ export interface CacheInfo {
   cache_hit?: boolean;
 }
 
-// ============================================================================
 // API CLIENT CONFIG
-// ============================================================================
 
 export interface APIConfig {
   baseURL: string;
@@ -2591,9 +2500,7 @@ export interface APIConfig {
   cacheTime: number; // 1 hour = 3600000ms
 }
 
-// ============================================================================
 // APP - Main application component with routing
-// ============================================================================
 
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -2607,9 +2514,7 @@ import { ScoutingPage } from './src/pages/ScoutingPage';
 import { MetaPage } from './src/pages/MetaPage';
 import { Game } from './src/types/api';
 
-// ============================================================================
 // TANSTACK QUERY CLIENT
-// ============================================================================
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -2621,9 +2526,7 @@ const queryClient = new QueryClient({
     },
 });
 
-// ============================================================================
 // MAIN APP
-// ============================================================================
 
 function App() {
     const [currentGame, setCurrentGame] = useState<Game>(Game.VALORANT);
