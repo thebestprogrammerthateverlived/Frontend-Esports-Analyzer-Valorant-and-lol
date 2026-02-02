@@ -1,5 +1,6 @@
 // ============================================================================
 // SEARCH PAGE - Autocomplete search
+// ============================================================================
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -109,7 +110,7 @@ export const SearchPage: React.FC<SearchPageProps> = ({ currentGame }) => {
                                     <SearchResultSkeleton key={i} />
                                 ))}
                             </div>
-                        ) : data && data.results.length > 0 ? (
+                        ) : data && data.results && data.results.length > 0 ? (
                             <div className="space-y-3">
                                 <p className="text-sm text-zinc-500 mb-4">
                                     Found {data.count} result{data.count !== 1 ? 's' : ''} for "{data.query}"
@@ -123,7 +124,19 @@ export const SearchPage: React.FC<SearchPageProps> = ({ currentGame }) => {
                                     />
                                 ))}
                             </div>
-                        ) : (
+                        ) : error ? (
+                            <div className="text-center py-12">
+                                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-zinc-900/50 border border-zinc-800/50 mb-4">
+                                    <SearchIcon size={24} className="text-zinc-600" />
+                                </div>
+                                <p className="text-zinc-400 text-sm mb-2">
+                                    Search failed
+                                </p>
+                                <p className="text-zinc-600 text-xs">
+                                    Please try again
+                                </p>
+                            </div>
+                        ) : data && (!data.results || data.results.length === 0) ? (
                             <div className="text-center py-12">
                                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-zinc-900/50 border border-zinc-800/50 mb-4">
                                     <SearchIcon size={24} className="text-zinc-600" />
@@ -135,7 +148,7 @@ export const SearchPage: React.FC<SearchPageProps> = ({ currentGame }) => {
                                     Try a different search term
                                 </p>
                             </div>
-                        )}
+                        ) : null}
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -169,7 +182,9 @@ export const SearchPage: React.FC<SearchPageProps> = ({ currentGame }) => {
     );
 };
 
+// ============================================================================
 // SEARCH RESULT ITEM
+// ============================================================================
 
 const SearchResultItem: React.FC<{
     result: SearchResult;
@@ -180,7 +195,7 @@ const SearchResultItem: React.FC<{
     const gradientTo = accentColor === 'red-600' ? 'to-red-700' : 'to-amber-600';
     const hoverText = accentColor === 'red-600' ? 'group-hover:text-red-600' : 'group-hover:text-amber-500';
     const hoverArrow = accentColor === 'red-600' ? 'group-hover:text-red-600' : 'group-hover:text-amber-500';
-
+    
     return (
         <motion.div
             initial={{ opacity: 0, x: -20 }}
