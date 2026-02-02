@@ -24,7 +24,7 @@ import type {
 // ============================================================================
 
 const API_CONFIG: APIConfig = {
-    baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080',
+    baseURL: import.meta.env.VITE_API_BASE_URL || 'https://valorant-league-of-legends-scouting.onrender.com',
     timeout: 30000, // 30 seconds
     retries: 3,
     cacheTime: 3600000, // 1 hour in milliseconds
