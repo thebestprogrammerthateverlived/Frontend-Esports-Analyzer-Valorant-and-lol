@@ -1,4 +1,4 @@
-// ============================================================================
+
 // TEAM SELECTOR - Dropdown for selecting teams
 
 import React, { useState } from 'react';
@@ -2553,3 +2553,6 @@ createRoot(document.getElementById('root')!).render(
     <App />
   </StrictMode>
 );
+
+
+'https://valorant-league-of-legends-scouting.onrender.com' || "https://curious-pithivier-f0a2d5.netlify.app/"

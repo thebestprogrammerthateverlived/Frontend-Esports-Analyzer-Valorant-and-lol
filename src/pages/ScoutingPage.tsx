@@ -1,4 +1,4 @@
-// ============================================================================
+
 // SCOUTING REPORT PAGE - Comprehensive team analysis
 
 import React, { useState } from 'react';

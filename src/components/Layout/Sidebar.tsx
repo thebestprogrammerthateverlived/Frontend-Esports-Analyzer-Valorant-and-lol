@@ -1,4 +1,4 @@
-// ============================================================================
+
 // SIDEBAR NAVIGATION - Game-specific theming with persistent navigation
 
 import React from 'react';

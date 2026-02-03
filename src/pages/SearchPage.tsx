@@ -1,6 +1,6 @@
-// ============================================================================
+
 // SEARCH PAGE - Autocomplete search
-// ============================================================================
+
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -162,8 +162,8 @@ export const SearchPage: React.FC<SearchPageProps> = ({ currentGame }) => {
                     </div>
                     <div className="flex flex-wrap gap-2">
                         {(currentGame === Game.VALORANT
-                            ? ['Sentinels', 'Cloud9', 'G2 Esports', 'Team Liquid', 'Fnatic']
-                            : ['T1', 'Gen.G', 'Fnatic', 'G2 Esports', 'Cloud9']
+                            ? ['Sentinels', 'Cloud9', 'G2 Esports',]
+                            : ['T1', 'Gen.G', 'Fnatic', 'G2 Esports',]
                         ).map((term) => (
                             <button
                                 key={term}
@@ -182,9 +182,9 @@ export const SearchPage: React.FC<SearchPageProps> = ({ currentGame }) => {
     );
 };
 
-// ============================================================================
+
 // SEARCH RESULT ITEM
-// ============================================================================
+
 
 const SearchResultItem: React.FC<{
     result: SearchResult;
@@ -195,7 +195,7 @@ const SearchResultItem: React.FC<{
     const gradientTo = accentColor === 'red-600' ? 'to-red-700' : 'to-amber-600';
     const hoverText = accentColor === 'red-600' ? 'group-hover:text-red-600' : 'group-hover:text-amber-500';
     const hoverArrow = accentColor === 'red-600' ? 'group-hover:text-red-600' : 'group-hover:text-amber-500';
-    
+
     return (
         <motion.div
             initial={{ opacity: 0, x: -20 }}

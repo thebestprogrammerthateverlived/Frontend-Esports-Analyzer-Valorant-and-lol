@@ -1,4 +1,4 @@
-// ============================================================================
+
 // META ANALYSIS PAGE - Coming Soon
 
 import React from 'react';
@@ -106,7 +106,7 @@ export const MetaPage: React.FC<MetaPageProps> = ({ currentGame }) => {
                             </motion.div>
                         ))}
                     </div>
-                </div>  
+                </div>
             </div>
         </PageWrapper>
     );

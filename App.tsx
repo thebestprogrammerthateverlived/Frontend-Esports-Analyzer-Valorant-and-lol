@@ -1,4 +1,4 @@
-// ============================================================================
+
 // APP - Main application component with routing
 
 import React, { useState } from 'react';

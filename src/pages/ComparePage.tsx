@@ -1,5 +1,6 @@
-// ============================================================================
+
 // COMPARE TEAMS PAGE - Side-by-side team comparison
+
 
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -153,7 +154,9 @@ export const ComparePage: React.FC<ComparePageProps> = ({ currentGame }) => {
     );
 };
 
+
 // TEAM METRICS CARD
+
 
 const TeamMetricsCard: React.FC<{
     name: string;
@@ -232,7 +235,9 @@ const TeamMetricsCard: React.FC<{
     );
 };
 
+
 // METRIC ROW
+
 
 const MetricRow: React.FC<{
     label: string;
@@ -257,7 +262,9 @@ const MetricRow: React.FC<{
     );
 };
 
+
 // ADVANTAGES CARD
+
 
 const AdvantagesCard: React.FC<{
     teamName: string;

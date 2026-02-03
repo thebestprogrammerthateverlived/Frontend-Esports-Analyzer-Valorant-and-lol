@@ -1,5 +1,6 @@
-// ============================================================================
+
 // TRENDS PAGE - Performance trends analysis
+
 
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -8,6 +9,7 @@ import { TrendingUp, TrendingDown, Minus, AlertTriangle } from 'lucide-react';
 import { PageWrapper } from '../components/Layout/PageWrapper';
 import { TrendChartSkeleton } from '../components/Shared/Skeletonloader';
 import { TeamSelector } from '../components/Compare/TeamSelector';
+import { ErrorDisplay } from '../components/Shared/ErrorDisplay';
 import { useToast } from '../components/Toast/ToastContext';
 import { api, queryKeys } from '../service/api';
 import { Game, TrendAlert } from '../types/api';
@@ -18,7 +20,6 @@ interface TrendsPageProps {
 
 export const TrendsPage: React.FC<TrendsPageProps> = ({ currentGame }) => {
     const [teamName, setTeamName] = useState<string>('');
-    // const [timeWindow, setTimeWindow] = useState<string>('LAST_3_MONTHS');
     const { showToast } = useToast();
 
     // Query trends
@@ -187,37 +188,11 @@ export const TrendsPage: React.FC<TrendsPageProps> = ({ currentGame }) => {
                     </div>
                 </div>
             ) : error && teamName ? (
-                <div className="max-w-2xl mx-auto mt-8">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="p-8 bg-zinc-900/50 border border-amber-800/50 rounded-xl"
-                    >
-                        <div className="text-center">
-                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-amber-950/30 border border-amber-800/50 mb-4">
-                                <AlertTriangle size={32} className="text-amber-500" />
-                            </div>
-                            <h3 className="text-xl font-semibold text-white mb-3">
-                                No Recent Match Data Available
-                            </h3>
-                            <p className="text-sm text-zinc-400 mb-2">
-                                <strong>{teamName}</strong> hasn't played any matches in the last 3 months.
-                            </p>
-                            <p className="text-xs text-zinc-500 mb-1">
-                                Trends analysis requires recent performance data to compare against overall statistics.
-                            </p>
-                            <p className="text-xs text-zinc-600 mb-6">
-                                The Grid.gg hackathon API has limited historical data. Try selecting a different team.
-                            </p>
-                            <button
-                                onClick={() => setTeamName('')}
-                                className="px-6 py-2.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-sm font-medium transition-colors shadow-lg"
-                            >
-                                Select Another Team
-                            </button>
-                        </div>
-                    </motion.div>
-                </div>
+                <ErrorDisplay
+                    error={error}
+                    onRetry={() => window.location.reload()}
+                    onReset={() => setTeamName('')}
+                />
             ) : teamName ? (
                 <div className="text-center py-12 text-zinc-500">
                     Loading trends...
@@ -231,7 +206,9 @@ export const TrendsPage: React.FC<TrendsPageProps> = ({ currentGame }) => {
     );
 };
 
+
 // SUMMARY CARD
+
 
 const SummaryCard: React.FC<{
     title: string;
@@ -264,7 +241,9 @@ const SummaryCard: React.FC<{
     );
 };
 
+
 // ALERT CARD
+
 
 const AlertCard: React.FC<{ alert: TrendAlert }> = ({ alert }) => {
     const getAlertStyles = () => {

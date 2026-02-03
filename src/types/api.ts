@@ -1,4 +1,4 @@
-// ============================================================================
+
 // API TYPE DEFINITIONS - SCOUTER ESPORTS ANALYZER
 // Maps to Go backend REST API endpoints
 

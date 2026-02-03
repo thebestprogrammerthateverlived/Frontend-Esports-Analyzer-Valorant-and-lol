@@ -1,4 +1,4 @@
-// ============================================================================
+
 // SKELETON LOADER - Animated loading placeholders
 
 import React from 'react';

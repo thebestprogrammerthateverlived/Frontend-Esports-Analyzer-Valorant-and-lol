@@ -1,4 +1,4 @@
-// ============================================================================
+
 // TEAM SELECTOR - Dropdown for selecting teams
 
 import React, { useState } from 'react';

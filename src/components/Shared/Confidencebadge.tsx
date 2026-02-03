@@ -1,4 +1,4 @@
-// ============================================================================
+
 // CONFIDENCE BADGE - Color-coded confidence indicators
 
 import React from 'react';

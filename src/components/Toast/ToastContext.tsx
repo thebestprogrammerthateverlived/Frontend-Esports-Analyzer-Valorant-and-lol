@@ -1,4 +1,4 @@
-// ============================================================================
+
 // TOAST CONTEXT - Global notification system
 
 import React, { createContext, useContext, useState, useCallback } from 'react';
