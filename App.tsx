@@ -12,6 +12,7 @@ import { TrendsPage } from './src/pages/TrendsPage';
 import { ScoutingPage } from './src/pages/ScoutingPage';
 import { MetaPage } from './src/pages/MetaPage';
 import { Game } from './src/types/api';
+import { Analytics } from '@vercel/analytics/react';
 
 // TANSTACK QUERY CLIENT
 
@@ -31,46 +32,49 @@ function App() {
     const [currentGame, setCurrentGame] = useState<Game>(Game.VALORANT);
 
     return (
-        <QueryClientProvider client={queryClient}>
-            <ToastProvider>
-                <BrowserRouter future={{
-                    v7_startTransition: true,
-                    v7_relativeSplatPath: true
-                }}>
-                    <div className="flex h-screen bg-zinc-950 text-white overflow-hidden">
-                        {/* Sidebar Navigation */}
-                        <Sidebar
-                            currentGame={currentGame}
-                            onGameChange={setCurrentGame}
-                        />
+        <>
+            <QueryClientProvider client={queryClient}>
+                <ToastProvider>
+                    <BrowserRouter future={{
+                        v7_startTransition: true,
+                        v7_relativeSplatPath: true
+                    }}>
+                        <div className="flex h-screen bg-zinc-950 text-white overflow-hidden">
+                            {/* Sidebar Navigation */}
+                            <Sidebar
+                                currentGame={currentGame}
+                                onGameChange={setCurrentGame}
+                            />
 
-                        {/* Main Content */}
-                        <Routes>
-                            <Route
-                                path="/"
-                                element={<SearchPage currentGame={currentGame} />}
-                            />
-                            <Route
-                                path="/compare"
-                                element={<ComparePage currentGame={currentGame} />}
-                            />
-                            <Route
-                                path="/trends"
-                                element={<TrendsPage currentGame={currentGame} />}
-                            />
-                            <Route
-                                path="/scouting"
-                                element={<ScoutingPage currentGame={currentGame} />}
-                            />
-                            <Route
-                                path="/meta"
-                                element={<MetaPage currentGame={currentGame} />}
-                            />
-                        </Routes>
-                    </div>
-                </BrowserRouter>
-            </ToastProvider>
-        </QueryClientProvider>
+                            {/* Main Content */}
+                            <Routes>
+                                <Route
+                                    path="/"
+                                    element={<SearchPage currentGame={currentGame} />}
+                                />
+                                <Route
+                                    path="/compare"
+                                    element={<ComparePage currentGame={currentGame} />}
+                                />
+                                <Route
+                                    path="/trends"
+                                    element={<TrendsPage currentGame={currentGame} />}
+                                />
+                                <Route
+                                    path="/scouting"
+                                    element={<ScoutingPage currentGame={currentGame} />}
+                                />
+                                <Route
+                                    path="/meta"
+                                    element={<MetaPage currentGame={currentGame} />}
+                                />
+                            </Routes>
+                        </div>
+                    </BrowserRouter>
+                </ToastProvider>
+            </QueryClientProvider>
+            <Analytics />
+        </>
     );
 }
 
