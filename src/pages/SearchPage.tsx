@@ -70,7 +70,7 @@ export const SearchPage: React.FC<SearchPageProps> = ({ currentGame }) => {
             placeholder="Search teams…"
             aria-label="Search teams"
             style={{ flex:1, background:'transparent', border:'none', outline:'none', fontSize:'23px', color:'var(--text-primary)' }}
-            className="placeholder:text-[color:var(--text-muted)]"
+            className="placeholder:text-(--text-muted)"
           />
           {isLoading && <Loader2 size={22} style={{ color:'var(--text-muted)', flexShrink:0 }} className="animate-spin" />}
         </div>
@@ -155,7 +155,7 @@ const ResultRow: React.FC<{ result: SearchResult; index: number; gameColor: stri
   >
     {/* Avatar */}
     <div
-      className="logo-clip flex items-center justify-center flex-shrink-0"
+      className="logo-clip flex items-center justify-center shrink-0"
       style={{ width:36, height:36, background:`linear-gradient(135deg,${gameColor} 0%,${gameColor}99 100%)` }}
     >
       <span style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:700, fontSize:'23px', color:'#fff' }}>

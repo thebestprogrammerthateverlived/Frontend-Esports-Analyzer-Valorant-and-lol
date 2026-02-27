@@ -102,7 +102,7 @@ export const NavRail: React.FC<NavRailProps> = ({ currentGame }) => {
 
     return (
         <aside
-            className="flex flex-col items-center py-5 flex-shrink-0"
+            className="flex flex-col items-center py-5 shrink-0"
             style={{
                 width: '84px',
                 borderRight: '1px solid var(--border)',
@@ -113,7 +113,7 @@ export const NavRail: React.FC<NavRailProps> = ({ currentGame }) => {
         >
             {/* Logo mark */}
             <div
-                className="flex items-center justify-center mb-7 flex-shrink-0"
+                className="flex items-center justify-center mb-7 shrink-0"
                 style={{
                     width: '42px', height: '42px',
                     background: `linear-gradient(135deg, ${gameColor} 0%, ${isVal ? '#a85858' : '#b87a60'} 100%)`,

@@ -101,7 +101,7 @@ export const TeamSelector: React.FC<TeamSelectorProps> = ({
                                             flex: 1, background: 'transparent', border: 'none', outline: 'none',
                                             fontSize: '18px', color: 'var(--text-primary)',
                                         }}
-                                        className="placeholder:text-[color:var(--text-muted)]"
+                                        className="placeholder:text-(--text-muted)"
                                     />
                                 </div>
                             </div>

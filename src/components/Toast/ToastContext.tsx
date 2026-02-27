@@ -108,7 +108,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return (
         <ToastContext.Provider value={{ showToast, hideToast }}>
             {children}
-            <div className="fixed bottom-0 right-0 z-[9999] p-6 pointer-events-none">
+            <div className="fixed bottom-0 right-0 z-9999 p-6 pointer-events-none">
                 <div className="flex flex-col gap-2.5 pointer-events-auto">
                     <AnimatePresence mode="popLayout">
                         {toasts.map(toast => (

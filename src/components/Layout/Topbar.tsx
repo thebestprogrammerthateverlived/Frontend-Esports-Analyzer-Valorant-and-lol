@@ -16,8 +16,6 @@ interface TopBarProps {
 const GameToggle: React.FC<{ currentGame: Game; onGameChange: (g: Game) => void }> = ({
     currentGame, onGameChange,
 }) => {
-    const isVal = currentGame === Game.VALORANT;
-
     return (
         <div
             className="flex items-center p-1 rounded-lg"
@@ -98,7 +96,7 @@ const ThemeButton: React.FC = () => {
 
 export const TopBar: React.FC<TopBarProps> = ({ title, currentGame, onGameChange }) => (
     <header
-        className="flex items-center justify-between px-6 flex-shrink-0"
+        className="flex items-center justify-between px-6 shrink-0"
         style={{
             height: '72px',
             borderBottom: '1px solid var(--border)',
