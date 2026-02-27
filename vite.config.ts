@@ -3,32 +3,36 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  plugins: [
-    react(),
-    tailwindcss(),
-  ],
-  resolve: {
-    alias: {
-      '@': '/src',
-    },
-  },
-  server: {
-    port: 5173,
-    strictPort: true,
-    host: true,
-  },
+  plugins: [react(), tailwindcss()],
+
   build: {
-    outDir: 'dist',
-    sourcemap: true,
     rollupOptions: {
       output: {
         manualChunks: {
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'query-vendor': ['@tanstack/react-query'],
-          'chart-vendor': ['recharts'],
-          'animation-vendor': ['motion'],
+          // Core React runtime — cached forever once downloaded
+          'vendor-react': ['react', 'react-dom'],
+
+          // Router — changes rarely
+          'vendor-router': ['react-router-dom'],
+
+          // Data-fetching — changes rarely
+          'vendor-query': ['@tanstack/react-query'],
+
+          // Animation — large, cache separately
+          'vendor-motion': ['motion'],
+
+          // Charts — large, only needed on trend pages
+          'vendor-charts': ['recharts'],
         },
       },
     },
+
+    // Raise the warning threshold slightly; our chunks are intentional
+    chunkSizeWarningLimit: 600,
+  },
+
+  // Faster dev-server cold starts
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router-dom', '@tanstack/react-query', 'motion'],
   },
 });

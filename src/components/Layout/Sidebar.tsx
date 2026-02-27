@@ -1,5 +1,4 @@
-
-// SIDEBAR NAVIGATION - Game-specific theming with persistent navigation
+// SIDEBAR NAVIGATION — Ember Console theme
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
@@ -11,8 +10,11 @@ import {
     Users,
     Layers,
     Settings,
+    Sun,
+    Moon,
 } from 'lucide-react';
 import { Game } from '../../types/api';
+import { useTheme } from '../../context/ThemeContext';
 
 // TYPES
 
@@ -27,14 +29,14 @@ interface NavItem {
     icon: React.ElementType;
 }
 
-// NAVIGATION ITEMS
+// NAV ITEMS
 
 const navItems: NavItem[] = [
-    { name: 'Search', path: '/', icon: Search },
-    { name: 'Compare', path: '/compare', icon: Users },
-    { name: 'Trends', path: '/trends', icon: TrendingUp },
-    { name: 'Scouting', path: '/scouting', icon: FileText },
-    { name: 'Meta', path: '/meta', icon: Layers },
+    { name: 'Search',   path: '/',        icon: Search },
+    { name: 'Compare',  path: '/compare', icon: Users },
+    { name: 'Trends',   path: '/trends',  icon: TrendingUp },
+    { name: 'Scouting', path: '/scouting',icon: FileText },
+    { name: 'Meta',     path: '/meta',    icon: Layers },
 ];
 
 // GAME SELECTOR
@@ -44,86 +46,166 @@ const GameSelector: React.FC<{
     onGameChange: (game: Game) => void;
 }> = ({ currentGame, onGameChange }) => {
     return (
-        <div className="relative">
-            <div className="flex gap-2 p-2 bg-zinc-900/50 rounded-lg border border-zinc-800/50">
-                {/* Valorant */}
-                <button
-                    onClick={() => onGameChange(Game.VALORANT)}
-                    className={`
-            flex-1 px-4 py-2.5 rounded-md font-semibold text-xs uppercase tracking-wider
-            transition-all duration-300 relative overflow-hidden
-            ${currentGame === Game.VALORANT
-                            ? 'text-white'
-                            : 'text-zinc-500 hover:text-zinc-300'
-                        }
-          `}
-                    aria-label="Switch to Valorant"
-                >
-                    {currentGame === Game.VALORANT && (
-                        <motion.div
-                            layoutId="game-selector"
-                            className="absolute inset-0 bg-linear-to-br from-red-600 to-red-700 rounded-md"
-                            transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
-                        />
-                    )}
-                    <span className="relative z-10">Valorant</span>
-                </button>
+        <div className="game-selector-track rounded-lg p-1 flex gap-1">
+            {/* Valorant */}
+            <button
+                onClick={() => onGameChange(Game.VALORANT)}
+                aria-label="Switch to Valorant"
+                className="relative flex-1 px-3 py-2 rounded-md overflow-hidden transition-all duration-300"
+                style={{
+                    color: currentGame === Game.VALORANT
+                        ? 'var(--text-primary)'
+                        : 'var(--text-muted)',
+                    fontFamily: 'Rajdhani, sans-serif',
+                    fontWeight: 600,
+                    fontSize: '11px',
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                }}
+            >
+                {currentGame === Game.VALORANT && (
+                    <motion.div
+                        layoutId="game-pill"
+                        className="absolute inset-0 rounded-md"
+                        style={{ background: 'linear-gradient(135deg, var(--game-val) 0%, #a85858 100%)' }}
+                        transition={{ type: 'spring', bounce: 0.25, duration: 0.5 }}
+                    />
+                )}
+                <span className="relative z-10">Valorant</span>
+            </button>
 
-                {/* League of Legends */}
-                <button
-                    onClick={() => onGameChange(Game.LOL)}
-                    className={`
-            flex-1 px-4 py-2.5 rounded-md font-semibold text-xs uppercase tracking-wider
-            transition-all duration-300 relative overflow-hidden
-            ${currentGame === Game.LOL
-                            ? 'text-black'
-                            : 'text-zinc-500 hover:text-zinc-300'
-                        }
-          `}
-                    aria-label="Switch to League of Legends"
-                >
-                    {currentGame === Game.LOL && (
-                        <motion.div
-                            layoutId="game-selector"
-                            className="absolute inset-0 bg-linear-to-br from-amber-400 to-amber-500 rounded-md"
-                            transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
-                        />
-                    )}
-                    <span className="relative z-10">League Of Legends</span>
-                </button>
-            </div>
+            {/* League of Legends */}
+            <button
+                onClick={() => onGameChange(Game.LOL)}
+                aria-label="Switch to League of Legends"
+                className="relative flex-1 px-3 py-2 rounded-md overflow-hidden transition-all duration-300"
+                style={{
+                    color: currentGame === Game.LOL
+                        ? 'var(--text-inverse)'
+                        : 'var(--text-muted)',
+                    fontFamily: 'Rajdhani, sans-serif',
+                    fontWeight: 600,
+                    fontSize: '11px',
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                }}
+            >
+                {currentGame === Game.LOL && (
+                    <motion.div
+                        layoutId="game-pill"
+                        className="absolute inset-0 rounded-md"
+                        style={{ background: 'linear-gradient(135deg, var(--game-lol) 0%, #b87a60 100%)' }}
+                        transition={{ type: 'spring', bounce: 0.25, duration: 0.5 }}
+                    />
+                )}
+                <span className="relative z-10">LoL</span>
+            </button>
         </div>
     );
 };
 
-// SIDEBAR COMPONENT
+// THEME TOGGLE
 
-export const Sidebar: React.FC<SidebarProps> = ({
-    currentGame,
-    onGameChange,
-}) => {
-    const location = useLocation();
-
-    const accentColor =
-        currentGame === Game.VALORANT
-            ? 'from-red-600 to-red-700'
-            : 'from-amber-400 to-amber-500';
+const ThemeToggle: React.FC = () => {
+    const { theme, toggleTheme } = useTheme();
+    const isLight = theme === 'light';
 
     return (
-        <aside className="w-64 h-screen bg-zinc-950 border-r border-zinc-800/50 flex flex-col">
+        <button
+            onClick={toggleTheme}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200"
+            style={{
+                color: 'var(--text-secondary)',
+            }}
+            aria-label={isLight ? 'Switch to dark mode' : 'Switch to light mode'}
+        >
+            <div className="flex items-center gap-2 flex-1">
+                {isLight ? (
+                    <Sun size={16} style={{ color: 'var(--accent-terra)' }} strokeWidth={2} />
+                ) : (
+                    <Moon size={16} style={{ color: 'var(--text-secondary)' }} strokeWidth={2} />
+                )}
+                <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 500, fontSize: '13px', letterSpacing: '0.04em' }}>
+                    {isLight ? 'Light Mode' : 'Dark Mode'}
+                </span>
+            </div>
+
+            {/* Toggle pill */}
+            <div
+                className="relative shrink-0"
+                style={{
+                    width: '34px',
+                    height: '20px',
+                    borderRadius: '10px',
+                    backgroundColor: isLight ? 'var(--accent-terra-dim)' : 'var(--bg-elevated)',
+                    border: `1px solid ${isLight ? 'var(--accent-terra)' : 'var(--border)'}`,
+                    transition: 'all 0.25s ease',
+                }}
+            >
+                <motion.div
+                    animate={{ x: isLight ? 14 : 0 }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                    style={{
+                        position: 'absolute',
+                        top: '2px',
+                        left: '2px',
+                        width: '14px',
+                        height: '14px',
+                        borderRadius: '50%',
+                        backgroundColor: isLight ? 'var(--accent-terra)' : 'var(--text-muted)',
+                    }}
+                />
+            </div>
+        </button>
+    );
+};
+
+// SIDEBAR
+
+export const Sidebar: React.FC<SidebarProps> = ({ currentGame, onGameChange }) => {
+    const location = useLocation();
+    const isVal = currentGame === Game.VALORANT;
+    const gameColor = isVal ? 'var(--game-val)' : 'var(--game-lol)';
+    const gameDim   = isVal ? 'var(--game-val-dim)' : 'var(--game-lol-dim)';
+
+    return (
+        <aside
+            className="sidebar-texture w-64 h-screen flex flex-col shrink-0"
+            style={{ borderRight: '1px solid var(--border)' }}
+        >
             {/* Header */}
-            <div className="p-6 border-b border-zinc-800/50">
-                <div className="flex items-center gap-3 mb-6">
+            <div className="p-5" style={{ borderBottom: '1px solid var(--border)' }}>
+                {/* Logo */}
+                <div className="flex items-center gap-3 mb-5">
                     <div
-                        className={`w-10 h-10 rounded-lg bg-linear-to-br ${accentColor} flex items-center justify-center`}
+                        className="logo-clip w-10 h-10 flex items-center justify-center shrink-0"
+                        style={{
+                            background: `linear-gradient(135deg, ${gameColor} 0%, ${isVal ? '#a85858' : '#b87a60'} 100%)`,
+                            transition: 'background 0.4s ease',
+                        }}
                     >
-                        <Layers size={20} className="text-white" strokeWidth={2.5} />
+                        <Layers size={18} color="#fff" strokeWidth={2.5} />
                     </div>
                     <div>
-                        <h1 className="text-xl font-bold text-white tracking-tight">
-                            Scouter
+                        <h1 style={{
+                            fontFamily: 'Rajdhani, sans-serif',
+                            fontSize: '22px',
+                            fontWeight: 700,
+                            letterSpacing: '0.06em',
+                            color: 'var(--text-primary)',
+                            lineHeight: 1,
+                        }}>
+                            SCOUTER
                         </h1>
-                        <p className="text-[10px] text-zinc-500 uppercase tracking-widest">
+                        <p style={{
+                            fontFamily: 'Rajdhani, sans-serif',
+                            fontSize: '9px',
+                            fontWeight: 500,
+                            letterSpacing: '0.18em',
+                            textTransform: 'uppercase',
+                            color: 'var(--text-muted)',
+                            marginTop: '2px',
+                        }}>
                             Esports Intel
                         </p>
                     </div>
@@ -133,8 +215,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
 
             {/* Navigation */}
-            <nav className="flex-1 px-3 py-6 overflow-y-auto">
-                <ul className="space-y-1">
+            <nav className="flex-1 px-3 py-5 overflow-y-auto">
+                <p style={{
+                    fontFamily: 'Rajdhani, sans-serif',
+                    fontSize: '10px',
+                    fontWeight: 600,
+                    letterSpacing: '0.14em',
+                    textTransform: 'uppercase',
+                    color: 'var(--text-muted)',
+                    paddingLeft: '12px',
+                    marginBottom: '10px',
+                }}>
+                    Navigation
+                </p>
+
+                <ul className="space-y-0.5">
                     {navItems.map((item) => {
                         const isActive = location.pathname === item.path;
                         const Icon = item.icon;
@@ -143,44 +238,53 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             <li key={item.path}>
                                 <Link
                                     to={item.path}
-                                    className={`
-                    group flex items-center gap-3 px-3 py-2.5 rounded-lg
-                    transition-all duration-200 relative
-                    ${isActive
-                                            ? 'text-white'
-                                            : 'text-zinc-400 hover:text-white hover:bg-zinc-900/50'
+                                    className="group flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 relative"
+                                    style={{
+                                        color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+                                        backgroundColor: isActive ? gameDim : 'transparent',
+                                    }}
+                                    onMouseEnter={e => {
+                                        if (!isActive) {
+                                            (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--bg-elevated)';
+                                            (e.currentTarget as HTMLElement).style.color = 'var(--text-primary)';
                                         }
-                  `}
+                                    }}
+                                    onMouseLeave={e => {
+                                        if (!isActive) {
+                                            (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent';
+                                            (e.currentTarget as HTMLElement).style.color = 'var(--text-secondary)';
+                                        }
+                                    }}
                                 >
-                                    {/* Active indicator */}
+                                    {/* Active bar */}
                                     {isActive && (
                                         <motion.div
-                                            layoutId="nav-indicator"
-                                            className={`absolute inset-0 bg-linear-to-br ${accentColor} opacity-10 rounded-lg`}
-                                            transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
-                                        />
-                                    )}
-
-                                    {/* Active border */}
-                                    {isActive && (
-                                        <motion.div
-                                            layoutId="nav-border"
-                                            className={`absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-linear-to-b ${accentColor} rounded-r-full`}
-                                            transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                                            layoutId="nav-bar"
+                                            className="nav-active-bar"
+                                            style={{ background: gameColor }}
+                                            transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }}
                                         />
                                     )}
 
                                     <Icon
-                                        size={18}
-                                        strokeWidth={2.5}
-                                        className={`relative z-10 ${isActive
-                                            ? currentGame === Game.VALORANT
-                                                ? 'text-red-500'
-                                                : 'text-amber-500'
-                                            : ''
-                                            }`}
+                                        size={17}
+                                        strokeWidth={isActive ? 2.5 : 2}
+                                        style={{
+                                            color: isActive ? gameColor : 'var(--text-secondary)',
+                                            position: 'relative',
+                                            zIndex: 1,
+                                            transition: 'color 0.2s ease',
+                                            flexShrink: 0,
+                                        }}
                                     />
-                                    <span className="relative z-10 text-sm font-medium">
+                                    <span style={{
+                                        fontFamily: 'Rajdhani, sans-serif',
+                                        fontSize: '14px',
+                                        fontWeight: isActive ? 600 : 500,
+                                        letterSpacing: '0.04em',
+                                        position: 'relative',
+                                        zIndex: 1,
+                                    }}>
                                         {item.name}
                                     </span>
                                 </Link>
@@ -191,14 +295,29 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </nav>
 
             {/* Footer */}
-            <div className="p-4 border-t border-zinc-800/50">
+            <div className="px-3 pb-4 pt-3 space-y-0.5" style={{ borderTop: '1px solid var(--border)' }}>
+                <ThemeToggle />
                 <button
-                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg
-                     text-zinc-400 hover:text-white hover:bg-zinc-900/50
-                     transition-all duration-200 text-sm"
+                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200"
+                    style={{ color: 'var(--text-secondary)' }}
+                    onMouseEnter={e => {
+                        (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--bg-elevated)';
+                        (e.currentTarget as HTMLElement).style.color = 'var(--text-primary)';
+                    }}
+                    onMouseLeave={e => {
+                        (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent';
+                        (e.currentTarget as HTMLElement).style.color = 'var(--text-secondary)';
+                    }}
                 >
-                    <Settings size={18} strokeWidth={2.5} />
-                    <span className="font-medium">Settings</span>
+                    <Settings size={16} strokeWidth={2} />
+                    <span style={{
+                        fontFamily: 'Rajdhani, sans-serif',
+                        fontSize: '14px',
+                        fontWeight: 500,
+                        letterSpacing: '0.04em',
+                    }}>
+                        Settings
+                    </span>
                 </button>
             </div>
         </aside>

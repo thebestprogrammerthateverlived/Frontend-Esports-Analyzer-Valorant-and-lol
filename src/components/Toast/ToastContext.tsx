@@ -1,11 +1,8 @@
-
-// TOAST CONTEXT - Global notification system
+// TOAST CONTEXT — Ember Console theme
 
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, AlertCircle, CheckCircle, Info, AlertTriangle } from 'lucide-react';
-
-// TYPES
 
 type ToastType = 'success' | 'error' | 'warning' | 'info';
 
@@ -18,91 +15,69 @@ interface Toast {
 }
 
 interface ToastContextValue {
-    showToast: (
-        type: ToastType,
-        title: string,
-        message?: string,
-        duration?: number
-    ) => void;
+    showToast: (type: ToastType, title: string, message?: string, duration?: number) => void;
     hideToast: (id: string) => void;
 }
-
-// CONTEXT
 
 const ToastContext = createContext<ToastContextValue | undefined>(undefined);
 
 export const useToast = () => {
     const context = useContext(ToastContext);
-    if (!context) {
-        throw new Error('useToast must be used within ToastProvider');
-    }
+    if (!context) throw new Error('useToast must be used within ToastProvider');
     return context;
 };
 
-// TOAST COMPONENT
+// Icon + color per type
 
-const ToastIcon = ({ type }: { type: ToastType }) => {
-    const iconProps = { size: 20, strokeWidth: 2.5 };
-
-    switch (type) {
-        case 'success':
-            return <CheckCircle {...iconProps} className="text-emerald-400" />;
-        case 'error':
-            return <AlertCircle {...iconProps} className="text-red-400" />;
-        case 'warning':
-            return <AlertTriangle {...iconProps} className="text-amber-400" />;
-        case 'info':
-            return <Info {...iconProps} className="text-blue-400" />;
-    }
+const toastConfig: Record<ToastType, { icon: React.ElementType; color: string; cssClass: string }> = {
+    success: { icon: CheckCircle, color: '#5E9E7E', cssClass: 'toast-success' },
+    error:   { icon: AlertCircle, color: 'var(--accent-rose)', cssClass: 'toast-error' },
+    warning: { icon: AlertTriangle, color: 'var(--accent-terra)', cssClass: 'toast-warning' },
+    info:    { icon: Info, color: 'var(--info)', cssClass: 'toast-info' },
 };
 
-const ToastItem = ({
-    toast,
-    onClose,
-}: {
-    toast: Toast;
-    onClose: () => void;
-}) => {
-    const bgColors: Record<ToastType, string> = {
-        success: 'bg-emerald-950/90 border-emerald-800/50',
-        error: 'bg-red-950/90 border-red-800/50',
-        warning: 'bg-amber-950/90 border-amber-800/50',
-        info: 'bg-blue-950/90 border-blue-800/50',
-    };
+const ToastItem: React.FC<{ toast: Toast; onClose: () => void }> = ({ toast, onClose }) => {
+    const { icon: Icon, color, cssClass } = toastConfig[toast.type];
 
     return (
         <motion.div
-            initial={{ opacity: 0, y: 50, scale: 0.95 }}
+            initial={{ opacity: 0, y: 40, scale: 0.94 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, x: 300, scale: 0.95 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className={`
-        ${bgColors[toast.type]}
-        border backdrop-blur-xl
-        rounded-lg p-4 pr-10
-        shadow-2xl shadow-black/50
-        min-w-[320px] max-w-100
-        relative
-      `}
+            exit={{ opacity: 0, x: 280, scale: 0.94 }}
+            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            className={`${cssClass} relative rounded-xl p-4 pr-10 border backdrop-blur-xl`}
+            style={{
+                minWidth: '300px',
+                maxWidth: '380px',
+                boxShadow: '0 16px 48px rgba(0,0,0,0.4)',
+            }}
         >
-            {/* Close button */}
             <button
                 onClick={onClose}
-                className="absolute top-3 right-3 text-zinc-400 hover:text-white transition-colors"
-                aria-label="Close notification"
+                className="absolute top-3 right-3 transition-opacity"
+                style={{ color: 'var(--text-muted)', background: 'none', border: 'none', cursor: 'pointer', padding: '2px' }}
+                onMouseEnter={e => (e.currentTarget.style.color = 'var(--text-primary)')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-muted)')}
+                aria-label="Close"
             >
-                <X size={16} />
+                <X size={28} />
             </button>
 
-            {/* Content */}
             <div className="flex items-start gap-3">
-                <div className="shrink-0 mt-0.5">
-                    <ToastIcon type={toast.type} />
-                </div>
-                <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-white mb-1">{toast.title}</p>
+                <Icon size={28} color={color} strokeWidth={2.5} style={{ flexShrink: 0, marginTop: '1px' }} />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{
+                        fontFamily: 'Rajdhani, sans-serif',
+                        fontSize: '18px',
+                        fontWeight: 600,
+                        letterSpacing: '0.03em',
+                        color: 'var(--text-primary)',
+                        marginBottom: toast.message ? '4px' : 0,
+                    }}>
+                        {toast.title}
+                    </p>
                     {toast.message && (
-                        <p className="text-xs text-zinc-300 leading-relaxed">
+                        <p style={{ fontSize: '18px', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
                             {toast.message}
                         </p>
                     )}
@@ -112,53 +87,32 @@ const ToastItem = ({
     );
 };
 
-// PROVIDER
-
-export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
-    children,
-}) => {
+export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [toasts, setToasts] = useState<Toast[]>([]);
 
-    const showToast = useCallback(
-        (
-            type: ToastType,
-            title: string,
-            message?: string,
-            duration: number = 5000
-        ) => {
-            const id = Math.random().toString(36).substr(2, 9);
-            const newToast: Toast = { id, type, title, message, duration };
-
-            setToasts((prev) => [...prev, newToast]);
-
-            // Auto-dismiss
-            if (duration > 0) {
-                setTimeout(() => {
-                    hideToast(id);
-                }, duration);
-            }
-        },
-        []
-    );
-
     const hideToast = useCallback((id: string) => {
-        setToasts((prev) => prev.filter((toast) => toast.id !== id));
+        setToasts(prev => prev.filter(t => t.id !== id));
     }, []);
+
+    const showToast = useCallback((
+        type: ToastType,
+        title: string,
+        message?: string,
+        duration = 5000,
+    ) => {
+        const id = Math.random().toString(36).substr(2, 9);
+        setToasts(prev => [...prev, { id, type, title, message, duration }]);
+        if (duration > 0) setTimeout(() => hideToast(id), duration);
+    }, [hideToast]);
 
     return (
         <ToastContext.Provider value={{ showToast, hideToast }}>
             {children}
-
-            {/* Toast Container */}
-            <div className="fixed bottom-0 right-0 z-9999 p-6 pointer-events-none">
-                <div className="flex flex-col gap-3 pointer-events-auto">
+            <div className="fixed bottom-0 right-0 z-[9999] p-6 pointer-events-none">
+                <div className="flex flex-col gap-2.5 pointer-events-auto">
                     <AnimatePresence mode="popLayout">
-                        {toasts.map((toast) => (
-                            <ToastItem
-                                key={toast.id}
-                                toast={toast}
-                                onClose={() => hideToast(toast.id)}
-                            />
+                        {toasts.map(toast => (
+                            <ToastItem key={toast.id} toast={toast} onClose={() => hideToast(toast.id)} />
                         ))}
                     </AnimatePresence>
                 </div>

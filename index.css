@@ -1,137 +1,167 @@
+/* index.css — Scouter · Ember Console
+   Font loaded via <link> in index.html (preconnect + display=swap)
+   ======================================================================= */
 @import "tailwindcss";
 
-/* ============================================================================
-   SCOUTER - GLOBAL STYLES
-   ============================================================================ */
-
-/* Custom Properties */
+/* ── TOKENS: DARK (default) ─────────────────────────────────────────────── */
 :root {
-  /* Colors - Dark Theme */
-  --color-bg-primary: #09090b;
-  --color-bg-secondary: #18181b;
-  --color-border: #27272a;
-  
-  /* Valorant Accent */
-  --color-valorant: #dc2626;
-  --color-valorant-dark: #991b1b;
-  
-  /* League Accent */
-  --color-lol: #f59e0b;
-  --color-lol-dark: #b45309;
-  
-  /* Font */
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --bg-primary:    #06080F;
+  --bg-secondary:  #0D1321;
+  --bg-card:       rgba(17,24,39,0.85);
+  --bg-card-solid: #111827;
+  --bg-elevated:   #162033;
+  --bg-input:      #0A0F1C;
+
+  --border:        rgba(212,149,122,0.09);
+  --border-hover:  rgba(212,149,122,0.2);
+  --border-active: rgba(201,112,112,0.5);
+  --border-subtle: rgba(255,255,255,0.05);
+
+  --text-primary:   #F0EEE6;
+  --text-secondary: #8892A4;
+  --text-muted:     #4E5A6E;
+  --text-inverse:   #06080F;
+
+  --accent-terra:      #D4957A;
+  --accent-terra-dim:  rgba(212,149,122,0.12);
+  --accent-terra-glow: rgba(212,149,122,0.22);
+  --accent-rose:       #C97070;
+  --accent-rose-dim:   rgba(201,112,112,0.12);
+
+  --game-val:       #C97070;
+  --game-val-dim:   rgba(201,112,112,0.11);
+  --game-lol:       #D4957A;
+  --game-lol-dim:   rgba(212,149,122,0.11);
+
+  --success:  #5E9E7E;
+  --info:     #6B8CAE;
+
+  --scrollbar-thumb: #1E2D47;
+
+  font-family: 'Outfit', system-ui, sans-serif;
 }
 
-/* ============================================================================
-   BASE STYLES
-   ============================================================================ */
+/* ── TOKENS: LIGHT ───────────────────────────────────────────────────────── */
+[data-theme="light"] {
+  --bg-primary:    #F0EEE6;
+  --bg-secondary:  #E8E4D8;
+  --bg-card:       rgba(245,243,235,0.92);
+  --bg-card-solid: #F5F3EB;
+  --bg-elevated:   #DED9CE;
+  --bg-input:      #EDE9DF;
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+  --border:        rgba(13,19,33,0.08);
+  --border-hover:  rgba(13,19,33,0.16);
+  --border-active: rgba(201,112,112,0.4);
+  --border-subtle: rgba(0,0,0,0.04);
+
+  --text-primary:   #0D1321;
+  --text-secondary: #4A556A;
+  --text-muted:     #8892A4;
+  --text-inverse:   #F0EEE6;
+
+  --scrollbar-thumb: #C4BAA8;
 }
 
-html,
-body,
-#root {
-  width: 100%;
-  height: 100%;
+/* ── BASE ────────────────────────────────────────────────────────────────── */
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html,body,#root { width: 100%; height: 100%; overflow: hidden; }
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  font-size: 17px;
+  line-height: 1.55;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* ── SEMANTIC HELPERS ────────────────────────────────────────────────────── */
+.card-theme {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: border-color 0.18s ease, background 0.25s ease;
+}
+.card-theme:hover { border-color: var(--border-hover); }
+
+.input-theme {
+  background: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  transition: border-color 0.18s ease, background 0.25s ease;
+}
+.input-theme::placeholder { color: var(--text-muted); }
+.input-theme:focus { border-color: var(--border-active); outline: none; }
+
+.dropdown-theme {
+  background: var(--bg-card-solid);
+  border: 1px solid var(--border-hover);
+  box-shadow: 0 20px 56px rgba(0,0,0,0.45);
+  transition: background 0.25s ease;
+}
+[data-theme="light"] .dropdown-theme { box-shadow: 0 10px 32px rgba(0,0,0,0.1); }
+
+.dropdown-item {
+  color: var(--text-secondary);
+  transition: background 0.12s ease, color 0.12s ease;
+  cursor: pointer;
+}
+.dropdown-item:hover { background: var(--bg-elevated); color: var(--text-primary); }
+
+.progress-track {
+  background: var(--bg-elevated);
+  border-radius: 999px;
   overflow: hidden;
 }
 
-body {
-  background-color: var(--color-bg-primary);
-  color: #ffffff;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Badge variants */
+.badge-success { background: rgba(94,158,126,0.14); border:1px solid rgba(94,158,126,0.28); color:#5E9E7E; }
+.badge-warning  { background: var(--accent-terra-dim); border:1px solid rgba(212,149,122,0.28); color:var(--accent-terra); }
+.badge-error    { background: var(--accent-rose-dim);  border:1px solid rgba(201,112,112,0.28); color:var(--accent-rose); }
+.badge-neutral  { background: var(--bg-elevated); border:1px solid var(--border); color:var(--text-secondary); }
+
+/* Toast variants */
+.toast-success { background:rgba(8,22,15,0.96);  border-color:rgba(94,158,126,0.32); }
+.toast-error   { background:rgba(22,8,8,0.96);   border-color:rgba(201,112,112,0.32); }
+.toast-warning { background:rgba(22,14,8,0.96);  border-color:rgba(212,149,122,0.32); }
+.toast-info    { background:rgba(8,15,26,0.96);  border-color:rgba(107,140,174,0.32); }
+[data-theme="light"] .toast-success { background:rgba(240,255,248,0.97); }
+[data-theme="light"] .toast-error   { background:rgba(255,240,240,0.97); }
+[data-theme="light"] .toast-warning { background:rgba(255,248,240,0.97); }
+[data-theme="light"] .toast-info    { background:rgba(240,246,255,0.97); }
+
+/* Clip used on logo mark & search result avatars */
+.logo-clip {
+  clip-path: polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px));
 }
 
-/* ============================================================================
-   SCROLLBAR STYLING
-   ============================================================================ */
-
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+/* ── SKELETON ────────────────────────────────────────────────────────────── */
+@keyframes shimmer { 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
+.skeleton-shine {
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg,transparent 0%,rgba(212,149,122,0.06) 50%,transparent 100%);
+  animation: shimmer 1.6s linear infinite;
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
-}
+/* ── SCROLLBAR ────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar       { width:6px; height:6px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--scrollbar-thumb); border-radius:3px; }
+::-webkit-scrollbar-thumb:hover { background:var(--border-hover); }
 
-::-webkit-scrollbar-thumb {
-  background: #3f3f46;
-  border-radius: 4px;
-}
+/* ── ACCESSIBILITY ───────────────────────────────────────────────────────── */
+*:focus-visible { outline:2px solid var(--accent-terra); outline-offset:2px; }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #52525b;
-}
-
-/* ============================================================================
-   ANIMATIONS
-   ============================================================================ */
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-.animate-pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-/* ============================================================================
-   UTILITIES
-   ============================================================================ */
-
-.text-balance {
-  text-wrap: balance;
-}
-
+/* ── UTILITIES ───────────────────────────────────────────────────────────── */
+.font-display { font-family:'Rajdhani',sans-serif; }
+.text-balance { text-wrap:balance; }
 .glass-effect {
-  background: rgba(24, 24, 27, 0.8);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background:rgba(17,24,39,0.75);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
 }
+[data-theme="light"] .glass-effect { background:rgba(245,243,235,0.8); }
 
-/* Focus visible for accessibility */
-*:focus-visible {
-  outline: 2px solid #3b82f6;
-  outline-offset: 2px;
-}
-
-/* ============================================================================
-    CUSTOM COMPONENTS
-   ============================================================================ */
-
-.gradient-border {
-  position: relative;
-}
-
-.gradient-border::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(135deg, #dc2626, #f59e0b);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-}
+/* Pulse for skeletons */
+@keyframes pulse-soft { 0%,100%{opacity:1} 50%{opacity:.45} }
+.animate-pulse { animation: pulse-soft 2s cubic-bezier(.4,0,.6,1) infinite; }

@@ -1,10 +1,9 @@
-
-// TEAM SELECTOR - Dropdown for selecting teams
+// TEAM SELECTOR — Ember Console theme
 
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { ChevronDown, Search } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { api, queryKeys } from '../../service/api';
 import { Game } from '../../types/api';
 
@@ -17,114 +16,115 @@ interface TeamSelectorProps {
 }
 
 export const TeamSelector: React.FC<TeamSelectorProps> = ({
-    label,
-    selectedTeam,
-    onChange,
-    game,
-    accentColor,
+    label, selectedTeam, onChange, game, accentColor,
 }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [searchQuery, setSearchQuery] = useState('');
+    const [search, setSearch] = useState('');
 
-    // Fetch teams list
     const { data: teamsData, isLoading } = useQuery({
         queryKey: queryKeys.teams(game),
         queryFn: () => api.getTeams(game),
-        staleTime: 3600000, // 1 hour
+        staleTime: 3_600_000,
     });
 
-    // Filter teams based on search
-    const filteredTeams = teamsData?.teams?.filter((team) =>
-        team.toLowerCase().includes(searchQuery.toLowerCase())
-    ) || [];
+    const teams = teamsData?.teams?.filter((t: string) =>
+        t.toLowerCase().includes(search.toLowerCase())
+    ) ?? [];
 
-    const borderColor = isOpen
-        ? (accentColor === 'red' ? 'border-red-600' : 'border-amber-600')
-        : 'border-zinc-800/50 hover:border-zinc-700';
+    const gameColor = accentColor === 'red' ? 'var(--game-val)' : 'var(--game-lol)';
+    const gameDim = accentColor === 'red' ? 'var(--game-val-dim)' : 'var(--game-lol-dim)';
 
     return (
         <div className="relative">
-            <label className="block text-sm font-medium text-zinc-400 mb-2">
+            <label style={{
+                display: 'block',
+                fontFamily: 'Rajdhani, sans-serif',
+                fontSize: '17px',
+                fontWeight: 600,
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color: 'var(--text-muted)',
+                marginBottom: '6px',
+            }}>
                 {label}
             </label>
 
-            {/* Selector Button */}
             <button
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={() => setIsOpen(v => !v)}
                 disabled={isLoading}
-                className={`w-full flex items-center justify-between px-4 py-3 bg-zinc-900/50 border rounded-lg transition-all duration-200 ${borderColor} ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className="w-full flex items-center justify-between px-4 py-3 rounded-lg transition-all duration-200"
+                style={{
+                    backgroundColor: 'var(--bg-card)',
+                    border: `1px solid ${isOpen ? gameColor + '88' : 'var(--border)'}`,
+                    boxShadow: isOpen ? `0 0 0 3px ${gameDim}` : 'none',
+                    color: selectedTeam ? 'var(--text-primary)' : 'var(--text-muted)',
+                    cursor: isLoading ? 'not-allowed' : 'pointer',
+                    opacity: isLoading ? 0.5 : 1,
+                }}
             >
-                <span className={selectedTeam ? 'text-white' : 'text-zinc-500'}>
-                    {selectedTeam || (isLoading ? 'Loading teams...' : 'Select a team...')}
+                <span style={{ fontSize: '18px', fontWeight: selectedTeam ? 500 : 400 }}>
+                    {selectedTeam || (isLoading ? 'Loading…' : 'Select a team…')}
                 </span>
                 <ChevronDown
-                    size={18}
-                    className={`transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                    size={24}
+                    style={{
+                        color: 'var(--text-muted)',
+                        flexShrink: 0,
+                        transform: isOpen ? 'rotate(180deg)' : 'none',
+                        transition: 'transform 0.2s ease',
+                    }}
                 />
             </button>
 
-            {/* Dropdown */}
             <AnimatePresence>
                 {isOpen && (
                     <>
-                        {/* Backdrop */}
-                        <div
-                            className="fixed inset-0 z-40"
-                            onClick={() => setIsOpen(false)}
-                        />
-
-                        {/* Dropdown content */}
+                        <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
                         <motion.div
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{ duration: 0.2 }}
-                            className="absolute top-full left-0 right-0 mt-2 z-50
-                       bg-zinc-900 border border-zinc-800 rounded-lg
-                       shadow-2xl shadow-black/50 overflow-hidden"
+                            initial={{ opacity: 0, y: -6, scale: 0.98 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: -6, scale: 0.98 }}
+                            transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
+                            className="dropdown-theme absolute top-full left-0 right-0 mt-1.5 z-50 rounded-lg overflow-hidden"
                         >
                             {/* Search */}
-                            <div className="p-3 border-b border-zinc-800">
-                                <div className="flex items-center gap-2 px-3 py-2 bg-zinc-950 rounded-lg">
-                                    <Search size={16} className="text-zinc-500" />
+                            <div className="p-2" style={{ borderBottom: '1px solid var(--border)' }}>
+                                <div className="flex items-center gap-2 px-3 py-2.5 rounded-md" style={{ backgroundColor: 'var(--bg-input)' }}>
+                                    <Search size={24} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
                                     <input
-                                        type="text"
-                                        value={searchQuery}
-                                        onChange={(e) => setSearchQuery(e.target.value)}
-                                        placeholder="Search teams..."
-                                        className="flex-1 bg-transparent text-white text-sm outline-none"
                                         autoFocus
+                                        type="text"
+                                        value={search}
+                                        onChange={e => setSearch(e.target.value)}
+                                        placeholder="Search…"
+                                        style={{
+                                            flex: 1, background: 'transparent', border: 'none', outline: 'none',
+                                            fontSize: '18px', color: 'var(--text-primary)',
+                                        }}
+                                        className="placeholder:text-[color:var(--text-muted)]"
                                     />
                                 </div>
                             </div>
 
-                            {/* Team List */}
-                            <div className="max-h-64 overflow-y-auto">
-                                {filteredTeams.length > 0 ? (
-                                    filteredTeams.map((team, index) => {
-                                        const isSelected = team === selectedTeam;
-                                        const selectedBg = accentColor === 'red'
-                                            ? 'bg-red-950/30 text-white'
-                                            : 'bg-amber-950/30 text-white';
-
+                            {/* List */}
+                            <div style={{ maxHeight: '220px', overflowY: 'auto' }}>
+                                {teams.length > 0 ? (
+                                    teams.map((team: string, i: number) => {
+                                        const sel = team === selectedTeam;
                                         return (
                                             <button
-                                                key={`${team}-${index}`}
-                                                onClick={() => {
-                                                    onChange(team);
-                                                    setIsOpen(false);
-                                                    setSearchQuery('');
-                                                }}
-                                                className={`w-full px-4 py-3 text-left transition-colors ${isSelected ? selectedBg : 'text-zinc-300 hover:bg-zinc-800'
-                                                    }`}
+                                                key={`${team}-${i}`}
+                                                onClick={() => { onChange(team); setIsOpen(false); setSearch(''); }}
+                                                className="w-full px-4 py-3 text-left dropdown-item"
+                                                style={sel ? { backgroundColor: gameDim, color: 'var(--text-primary)' } : {}}
                                             >
-                                                <p className="text-sm font-medium">{team}</p>
+                                                <span style={{ fontSize: '18px', fontWeight: sel ? 600 : 400 }}>{team}</span>
                                             </button>
                                         );
                                     })
                                 ) : (
-                                    <div className="px-4 py-8 text-center text-zinc-500 text-sm">
-                                        {isLoading ? 'Loading...' : 'No teams found'}
+                                    <div style={{ padding: '28px 16px', textAlign: 'center', fontSize: '18px', color: 'var(--text-muted)' }}>
+                                        {isLoading ? 'Loading…' : 'No teams found'}
                                     </div>
                                 )}
                             </div>

@@ -1,11 +1,9 @@
-
-// SEARCH PAGE - Autocomplete search
-
+// SEARCH PAGE — Ember Console
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Search as SearchIcon, Loader2, TrendingUp } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Search as SearchIcon, Loader2, Hash } from 'lucide-react';
 import { PageWrapper } from '../components/Layout/PageWrapper';
 import { SearchResultSkeleton } from '../components/Shared/Skeletonloader';
 import { useToast } from '../components/Toast/ToastContext';
@@ -13,234 +11,177 @@ import { api, queryKeys } from '../service/api';
 import { Game, SearchResult } from '../types/api';
 import { useDebounce } from '../hooks/useDebounce';
 
-interface SearchPageProps {
-    currentGame: Game;
-}
+interface SearchPageProps { currentGame: Game; }
+
+const POPULAR: Record<Game, string[]> = {
+  [Game.VALORANT]: ['Sentinels', 'Cloud9', 'G2 Esports', 'LOUD', 'NRG'],
+  [Game.LOL]:      ['T1', 'Gen.G', 'Fnatic', 'G2 Esports', 'Cloud9'],
+};
 
 export const SearchPage: React.FC<SearchPageProps> = ({ currentGame }) => {
-    const [query, setQuery] = useState('');
-    const [isFocused, setIsFocused] = useState(false);
-    const debouncedQuery = useDebounce(query, 300);
-    const inputRef = useRef<HTMLInputElement>(null);
-    const { showToast } = useToast();
+  const [query, setQuery]         = useState('');
+  const [isFocused, setIsFocused] = useState(false);
+  const debounced = useDebounce(query, 300);
+  const inputRef  = useRef<HTMLInputElement>(null);
+  const { showToast } = useToast();
 
-    // Auto-focus on mount
-    useEffect(() => {
-        inputRef.current?.focus();
-    }, []);
+  const isVal     = currentGame === Game.VALORANT;
+  const gameColor = isVal ? 'var(--game-val)' : 'var(--game-lol)';
+  const gameDim   = isVal ? 'var(--game-val-dim)' : 'var(--game-lol-dim)';
 
-    // Query search
-    const { data, isLoading, error } = useQuery({
-        queryKey: queryKeys.search({ query: debouncedQuery, game: currentGame }),
-        queryFn: () => api.search({ query: debouncedQuery, game: currentGame }),
-        enabled: debouncedQuery.length >= 2,
-        staleTime: 3600000,
-    });
+  useEffect(() => { inputRef.current?.focus(); }, []);
 
-    // Handle errors
-    useEffect(() => {
-        if (error) {
-            showToast('error', 'Search failed', (error as Error).message);
-        }
-    }, [error, showToast]);
+  const { data, isLoading, error } = useQuery({
+    queryKey: queryKeys.search({ query: debounced, game: currentGame }),
+    queryFn:  () => api.search({ query: debounced, game: currentGame }),
+    enabled:  debounced.length >= 2,
+    staleTime: 3_600_000,
+  });
 
-    const accentColor = currentGame === Game.VALORANT ? 'red-600' : 'amber-500';
-    const borderFocused = currentGame === Game.VALORANT ? 'border-red-600' : 'border-amber-500';
-    const textFocused = currentGame === Game.VALORANT ? 'text-red-600' : 'text-amber-500';
+  useEffect(() => {
+    if (error) showToast('error', 'Search failed', (error as Error).message);
+  }, [error, showToast]);
 
-    return (
-        <PageWrapper
-            title="Search Teams"
-            description="Find and analyze esports teams across Valorant and League of Legends"
+  const hasResults = (data?.results?.length ?? 0) > 0;
+
+  return (
+    <PageWrapper description="Find and analyze esports teams">
+      {/* ── Search bar ── */}
+      <div style={{ maxWidth: '600px', margin: '0 auto 32px' }}>
+        <div
+          className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200"
+          style={{
+            backgroundColor: 'var(--bg-card)',
+            border: `1px solid ${isFocused ? gameColor + '80' : 'var(--border)'}`,
+            boxShadow: isFocused ? `0 0 0 3px ${gameDim}, 0 4px 20px rgba(0,0,0,0.2)` : '0 2px 8px rgba(0,0,0,0.1)',
+          }}
         >
-            {/* Search Input */}
-            <div className="max-w-2xl mx-auto mb-12">
-                <div className="relative">
-                    <div
-                        className={`
-              relative flex items-center gap-3 px-4 py-4
-              bg-zinc-900/50 border rounded-xl
-              transition-all duration-300
-              ${isFocused ? `${borderFocused} shadow-lg` : 'border-zinc-800/50'}
-            `}
-                    >
-                        <SearchIcon
-                            size={20}
-                            className={`shrink-0 transition-colors ${isFocused ? textFocused : 'text-zinc-500'}`}
-                        />
-                        <input
-                            ref={inputRef}
-                            type="text"
-                            value={query}
-                            onChange={(e) => setQuery(e.target.value)}
-                            onFocus={() => setIsFocused(true)}
-                            onBlur={() => setTimeout(() => setIsFocused(false), 200)}
-                            placeholder="Search for teams..."
-                            className="flex-1 bg-transparent text-white placeholder-zinc-500 
-                       text-lg outline-none"
-                            aria-label="Search teams"
-                        />
-                        {isLoading && (
-                            <Loader2 size={20} className="animate-spin text-zinc-500" />
-                        )}
-                    </div>
+          <SearchIcon
+            size={28}
+            style={{ color: isFocused ? gameColor : 'var(--text-muted)', flexShrink: 0, transition: 'color 0.2s' }}
+          />
+          <input
+            ref={inputRef}
+            type="text"
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setTimeout(() => setIsFocused(false), 150)}
+            placeholder="Search teams…"
+            aria-label="Search teams"
+            style={{ flex:1, background:'transparent', border:'none', outline:'none', fontSize:'23px', color:'var(--text-primary)' }}
+            className="placeholder:text-[color:var(--text-muted)]"
+          />
+          {isLoading && <Loader2 size={22} style={{ color:'var(--text-muted)', flexShrink:0 }} className="animate-spin" />}
+        </div>
+      </div>
 
-                    {/* Search hint */}
-                    {!isFocused && query.length === 0 && (
-                        <p className="mt-2 text-xs text-zinc-600 text-center">
-                            Type at least 2 characters to search
-                        </p>
-                    )}
+      {/* ── Results area ── */}
+      <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+        <AnimatePresence mode="wait">
+          {debounced.length >= 2 ? (
+            <motion.div
+              key="results"
+              initial={{ opacity:0, y:10 }}
+              animate={{ opacity:1, y:0 }}
+              exit={{ opacity:0, y:-8 }}
+              transition={{ duration:0.24 }}
+            >
+              {isLoading ? (
+                <div className="space-y-2">
+                  {[1,2,3,4].map(i => <SearchResultSkeleton key={i} />)}
                 </div>
-            </div>
-
-            {/* Results */}
-            <AnimatePresence mode="wait">
-                {debouncedQuery.length >= 2 && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        transition={{ duration: 0.3 }}
-                        className="max-w-2xl mx-auto"
-                    >
-                        {isLoading ? (
-                            <div className="space-y-3">
-                                {[1, 2, 3, 4, 5].map((i) => (
-                                    <SearchResultSkeleton key={i} />
-                                ))}
-                            </div>
-                        ) : data && data.results && data.results.length > 0 ? (
-                            <div className="space-y-3">
-                                <p className="text-sm text-zinc-500 mb-4">
-                                    Found {data.count} result{data.count !== 1 ? 's' : ''} for "{data.query}"
-                                </p>
-                                {data.results.map((result, index) => (
-                                    <SearchResultItem
-                                        key={`${result.name}-${index}`}
-                                        result={result}
-                                        index={index}
-                                        accentColor={accentColor}
-                                    />
-                                ))}
-                            </div>
-                        ) : error ? (
-                            <div className="text-center py-12">
-                                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-zinc-900/50 border border-zinc-800/50 mb-4">
-                                    <SearchIcon size={24} className="text-zinc-600" />
-                                </div>
-                                <p className="text-zinc-400 text-sm mb-2">
-                                    Search failed
-                                </p>
-                                <p className="text-zinc-600 text-xs">
-                                    Please try again
-                                </p>
-                            </div>
-                        ) : data && (!data.results || data.results.length === 0) ? (
-                            <div className="text-center py-12">
-                                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-zinc-900/50 border border-zinc-800/50 mb-4">
-                                    <SearchIcon size={24} className="text-zinc-600" />
-                                </div>
-                                <p className="text-zinc-400 text-sm">
-                                    No results found for "{debouncedQuery}"
-                                </p>
-                                <p className="text-zinc-600 text-xs mt-1">
-                                    Try a different search term
-                                </p>
-                            </div>
-                        ) : null}
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
-            {/* Popular searches hint */}
-            {query.length === 0 && (
-                <div className="max-w-2xl mx-auto mt-16">
-                    <div className="flex items-center gap-2 mb-4">
-                        <TrendingUp size={16} className="text-zinc-600" />
-                        <h3 className="text-sm font-medium text-zinc-500">Popular searches</h3>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                        {(currentGame === Game.VALORANT
-                            ? ['Sentinels', 'Cloud9', 'G2 Esports',]
-                            : ['T1', 'Gen.G', 'Fnatic', 'G2 Esports',]
-                        ).map((term) => (
-                            <button
-                                key={term}
-                                onClick={() => setQuery(term)}
-                                className="px-4 py-2 bg-zinc-900/50 border border-zinc-800/50 rounded-lg
-                         text-sm text-zinc-400 hover:text-white hover:border-zinc-700
-                         transition-all duration-200"
-                            >
-                                {term}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            )}
-        </PageWrapper>
-    );
+              ) : hasResults ? (
+                <>
+                  <p style={{ fontSize:'18px', color:'var(--text-muted)', marginBottom:'10px' }}>
+                    <span style={{ color:'var(--text-secondary)', fontWeight:600 }}>{data?.count}</span> result{(data?.count ?? 0) !== 1 ? 's' : ''} for &ldquo;{data?.query}&rdquo;
+                  </p>
+                  <div className="space-y-1.5">
+                    {(data?.results ?? []).map((r: SearchResult, i: number) => (
+                      <ResultRow key={`${r.name}-${i}`} result={r} index={i} gameColor={gameColor} />
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <EmptyState query={debounced} />
+              )}
+            </motion.div>
+          ) : (
+            <motion.div
+              key="popular"
+              initial={{ opacity:0 }}
+              animate={{ opacity:1 }}
+              exit={{ opacity:0 }}
+              transition={{ duration:0.2 }}
+            >
+              <p style={{ fontSize:'17px', fontFamily:'Rajdhani,sans-serif', fontWeight:600, letterSpacing:'0.12em', textTransform:'uppercase', color:'var(--text-muted)', marginBottom:'10px' }}>
+                Popular
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {POPULAR[currentGame].map(term => (
+                  <button
+                    key={term}
+                    onClick={() => setQuery(term)}
+                    className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg transition-all duration-150"
+                    style={{ backgroundColor:'var(--bg-card)', border:'1px solid var(--border)', fontSize:'18px', color:'var(--text-secondary)', cursor:'pointer' }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor='var(--border-hover)'; (e.currentTarget as HTMLElement).style.color='var(--text-primary)'; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor='var(--border)'; (e.currentTarget as HTMLElement).style.color='var(--text-secondary)'; }}
+                  >
+                    <Hash size={20} style={{ color:'var(--text-muted)' }} />
+                    {term}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </PageWrapper>
+  );
 };
 
+// ── Result row ──────────────────────────────────────────────────────────────
+const ResultRow: React.FC<{ result: SearchResult; index: number; gameColor: string }> = ({
+  result, index, gameColor,
+}) => (
+  <motion.div
+    initial={{ opacity:0, x:-12 }}
+    animate={{ opacity:1, x:0 }}
+    transition={{ delay: index * 0.03 }}
+    className="flex items-center gap-3 p-3 rounded-lg transition-all duration-150"
+    style={{ backgroundColor:'var(--bg-card)', border:'1px solid var(--border)', cursor:'pointer' }}
+    onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor='var(--border-hover)'; el.style.backgroundColor='var(--bg-elevated)'; }}
+    onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor='var(--border)'; el.style.backgroundColor='var(--bg-card)'; }}
+  >
+    {/* Avatar */}
+    <div
+      className="logo-clip flex items-center justify-center flex-shrink-0"
+      style={{ width:36, height:36, background:`linear-gradient(135deg,${gameColor} 0%,${gameColor}99 100%)` }}
+    >
+      <span style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:700, fontSize:'23px', color:'#fff' }}>
+        {result.name.charAt(0)}
+      </span>
+    </div>
 
-// SEARCH RESULT ITEM
+    {/* Info */}
+    <div style={{ flex:1, minWidth:0 }}>
+      <p style={{ fontFamily:'Rajdhani,sans-serif', fontSize:'23px', fontWeight:600, color:'var(--text-primary)', lineHeight:1.2 }}>
+        {result.displayName}
+      </p>
+      <p style={{ fontSize:'17px', color:'var(--text-muted)', marginTop:'2px' }}>
+        {result.title} · {result.relevance}% match
+      </p>
+    </div>
 
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--text-muted)" strokeWidth="2" strokeLinecap="round" style={{ flexShrink:0 }}>
+      <path d="M5 3l6 5-6 5" />
+    </svg>
+  </motion.div>
+);
 
-const SearchResultItem: React.FC<{
-    result: SearchResult;
-    index: number;
-    accentColor: string;
-}> = ({ result, index, accentColor }) => {
-    const gradientFrom = accentColor === 'red-600' ? 'from-red-600' : 'from-amber-500';
-    const gradientTo = accentColor === 'red-600' ? 'to-red-700' : 'to-amber-600';
-    const hoverText = accentColor === 'red-600' ? 'group-hover:text-red-600' : 'group-hover:text-amber-500';
-    const hoverArrow = accentColor === 'red-600' ? 'group-hover:text-red-600' : 'group-hover:text-amber-500';
-
-    return (
-        <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: index * 0.05 }}
-            className="flex items-center gap-4 p-4 
-               bg-zinc-900/50 border border-zinc-800/50 rounded-lg
-               hover:bg-zinc-900 hover:border-zinc-700
-               transition-all duration-200 group"
-        >
-            {/* Team Logo Placeholder */}
-            <div className={`w-12 h-12 rounded-lg bg-linear-to-br ${gradientFrom} ${gradientTo} flex items-center justify-center shrink-0`}>
-                <span className="text-white font-bold text-lg">
-                    {result.name.charAt(0)}
-                </span>
-            </div>
-
-            {/* Team Info */}
-            <div className="flex-1 min-w-0">
-                <h3 className={`text-white font-semibold ${hoverText} transition-colors`}>
-                    {result.displayName}
-                </h3>
-                <div className="flex items-center gap-2 mt-1">
-                    <span className="text-xs text-zinc-500 uppercase tracking-wide">
-                        {result.title}
-                    </span>
-                    <span className="text-zinc-700">•</span>
-                    <span className="text-xs text-zinc-600">
-                        Match: {result.relevance}%
-                    </span>
-                </div>
-            </div>
-
-            {/* Arrow */}
-            <div className={`text-zinc-600 ${hoverArrow} transition-colors`}>
-                <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    stroke="currentColor"
-                >
-                    <path d="M7 4l6 6-6 6" strokeWidth="2" strokeLinecap="round" />
-                </svg>
-            </div>
-        </motion.div>
-    );
-};
+const EmptyState: React.FC<{ query: string }> = ({ query }) => (
+  <div style={{ textAlign:'center', padding:'40px 0' }}>
+    <p style={{ fontSize:'18px', color:'var(--text-secondary)', marginBottom:'4px' }}>No results for &ldquo;{query}&rdquo;</p>
+    <p style={{ fontSize:'18px', color:'var(--text-muted)' }}>Try a different search term</p>
+  </div>
+);
